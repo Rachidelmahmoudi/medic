@@ -73,8 +73,8 @@ class ConsultationExamenRepository extends ServiceEntityRepository
     public function findByConsultation($idconsult)
     {
         return $this->createQueryBuilder('ce')
-            ->innerJoin('App\Entity\Examen','e','with','ce.examen = e.id')
-            ->innerJoin('App\Entity\Consultation','c','with','c.id = ce.Consultation')
+            ->innerJoin('App\Entity\Examen', 'e', 'with', 'ce.examen = e.id')
+            ->innerJoin('App\Entity\Consultation', 'c', 'with', 'c.id = ce.Consultation')
             ->select(array('ce'))
             ->Where('ce.Consultation = :conc')
             ->setParameter('conc', $idconsult)
@@ -82,10 +82,10 @@ class ConsultationExamenRepository extends ServiceEntityRepository
             ->getResult();
     }
     
-    public  function  findFacturesnogeneres($idconsult)
+    public function findFacturesnogeneres($idconsult)
     {
         $r1 = $this->createQueryBuilder('ce')
-            ->leftJoin('App\Entity\FactureConsultationExamen','fce','with','fce.consult_examen = ce.id')
+            ->leftJoin('App\Entity\FactureConsultationExamen', 'fce', 'with', 'fce.consult_examen = ce.id')
             ->select(array('ce'))
             ->Where('ce.Consultation = :conc')
             ->setParameter('conc', $idconsult)
@@ -96,5 +96,4 @@ class ConsultationExamenRepository extends ServiceEntityRepository
 
         return $r1;
     }
-
 }

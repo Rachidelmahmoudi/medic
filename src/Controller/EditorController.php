@@ -20,7 +20,8 @@ use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\PhpWord;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
-class EditorController extends AbstractController {
+class EditorController extends AbstractController
+{
 
     /**
      * @Route("/etiquette/{id}", name="editor_etiquetteprestation")
@@ -29,8 +30,9 @@ class EditorController extends AbstractController {
     public function etiquettePrestation($id)
     {
         $ConsultationExamen = $this->getDoctrine()->getRepository(ConsultationExamen::class)->findOneBy(['id'=>$id]);
-        if(!$ConsultationExamen)
+        if (!$ConsultationExamen) {
             $ConsultationExamen = [];
+        }
 
         return $this->render('rapport/etiquette-prestation.html.twig', ['info' => $ConsultationExamen]);
     }
@@ -44,11 +46,10 @@ class EditorController extends AbstractController {
     public function facturePrestation($id)
     {
         $facture = $this->getDoctrine()->getRepository(FactureConsultationExamen::class)->findOneBy(['consult_examen'=>$id]);
-        if($facture)
-        {
-            return $this->render('rapport/facture-prestation.html.twig',['facture'=>$facture]);
+        if ($facture) {
+            return $this->render('rapport/facture-prestation.html.twig', ['facture'=>$facture]);
         }
-        return $this->render('rapport/facture-prestation.html.twig',['prestation'=>$id]);
+        return $this->render('rapport/facture-prestation.html.twig', ['prestation'=>$id]);
     }
     
     /**
@@ -75,7 +76,6 @@ class EditorController extends AbstractController {
      */
     public function RunWordDoc(Request $request)
     {
-
         $entityManager = $this->getDoctrine()->getManager();
         $data = $request->request->all();
         $idexamain_consultat = $data['idexamin_consultation'];
@@ -83,11 +83,9 @@ class EditorController extends AbstractController {
         $ConsultationExamen = $this->getDoctrine()->getRepository(ConsultationExamen::class)->find($idexamain_consultat);
 
         if ($ConsultationExamen->getIshaverapport() == 1) {
-
             exec('.\create-word.bat ' . $idexamain_consultat);
             $response = 1;
             return new Response(json_encode($response));
-
         }
 
         //--------DATA PATIENT---------
@@ -121,7 +119,6 @@ class EditorController extends AbstractController {
         // Write file into path
 
         try {
-
             $objWriter->save($filePath);
             exec('.\create-word.bat ' . $idexamain_consultat);
 
@@ -130,21 +127,17 @@ class EditorController extends AbstractController {
             $entityManager->flush();
 
             $response = 1;
-
         } catch (\Exception $e) {
             $response = 0;
-
         }
 
         return new Response(json_encode($response));
-
     }
     /**
      * @Route("/updateRapport", name="updateRapport")
      */
     public function updateRapport(Request $request)
     {
-
         $entityManager = $this->getDoctrine()->getManager();
 
         $data = $request->request->all();
@@ -156,18 +149,14 @@ class EditorController extends AbstractController {
         $ConsultationExamen->setrapport($bodyData);
 
         try {
-
             $entityManager->persist($ConsultationExamen);
             $entityManager->flush();
             $response = 1;
-
         } catch (\Exception $e) {
             $response = 0;
-
         }
 
         return new Response(json_encode($response));
-
     }
 
     /**
@@ -175,7 +164,6 @@ class EditorController extends AbstractController {
      */
     public function compteRendu($id, Request $request)
     {
-
         $entityManager = $this->getDoctrine()->getManager();
 
         $bodyTemplate = $this->getDoctrine()->getRepository(Model::class)->find(1)->getRapport();
@@ -183,7 +171,6 @@ class EditorController extends AbstractController {
 
         if ($ConsultationExamen->getIshaverapport() == 1) {
             $bodyTemplate = $ConsultationExamen->getRapport();
-
         }
 
         //--------DATA PATIENT---------
@@ -214,7 +201,6 @@ class EditorController extends AbstractController {
      */
     public function facture($id, Request $request)
     {
-
         $entityManager = $this->getDoctrine()->getManager();
 
         // $bodyTemplate = $this->getDoctrine()->getRepository(Model::class)->find(2)->getRapport();
@@ -261,7 +247,6 @@ class EditorController extends AbstractController {
         $info['getavance'] = $getavance;
 
         return $this->render('rapport/facture.html.twig', ['info' => $info]);
-
     }
 
     /**
@@ -269,11 +254,11 @@ class EditorController extends AbstractController {
      */
     public function etiquette($id, Request $request)
     {
-
         $ConsultationExamen = $this->getDoctrine()->getRepository(ConsultationExamen::class)->findOneBy(['id'=>$id]);
 
-        if(!$ConsultationExamen)
+        if (!$ConsultationExamen) {
             $ConsultationExamen = [];
+        }
         
 
         return $this->render('rapport/etiquette.html.twig', ['info' => $ConsultationExamen]);

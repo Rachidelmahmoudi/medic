@@ -81,7 +81,7 @@ class Origine
         return $this;
     }
 
-    public  function  __toString()
+    public function __toString()
     {
         return $this->getOrigine() != null ? $this->getOrigine()  : "";
         // TODO: Implement __toString() method.

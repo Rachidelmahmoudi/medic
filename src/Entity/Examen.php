@@ -26,9 +26,9 @@ class Examen
      */
     private $type;
 
-     /**
-     * @ORM\Column(type="float",  nullable=true)
-     */
+    /**
+    * @ORM\Column(type="float",  nullable=true)
+    */
     private $prix;
 
 
