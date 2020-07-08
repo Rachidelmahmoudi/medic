@@ -81,7 +81,7 @@ class Mutuelle
         return $this;
     }
 
-    public  function  __toString()
+    public function __toString()
     {
         return $this->getNom() != null ? $this->getNom()  : "";
         // TODO: Implement __toString() method.

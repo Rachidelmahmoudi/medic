@@ -50,8 +50,8 @@ class ExamenRepository extends ServiceEntityRepository
     public function findByConsultation($consu)
     {
         return $this->createQueryBuilder('e')
-            ->innerJoin('App\Entity\ConsultationExamen','ce','with','ce.examen = e.id')
-            ->innerJoin('App\Entity\Consultation','c','with','ce.Consultation = c.id')
+            ->innerJoin('App\Entity\ConsultationExamen', 'ce', 'with', 'ce.examen = e.id')
+            ->innerJoin('App\Entity\Consultation', 'c', 'with', 'ce.Consultation = c.id')
             ->select('e')
             ->Where('c.id = :conc')
             ->setParameter('conc', $consu)

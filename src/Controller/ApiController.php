@@ -7,20 +7,19 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Entity\{Consultation,
-    ConsultationExamen,
-    Examen,
-    Facture,
-    FactureConsultationExamen,
-    Model,
-    Patient,
-    TypeExamen,
-    Ville,
-    Medecin,
-    Origine,
-    Mutuelle,
-    DetailsMutuelle
-};
+use App\Entity\Consultation;
+use App\Entity\ConsultationExamen;
+use App\Entity\Examen;
+use App\Entity\Facture;
+use App\Entity\FactureConsultationExamen;
+use App\Entity\Model;
+use App\Entity\Patient;
+use App\Entity\TypeExamen;
+use App\Entity\Ville;
+use App\Entity\Medecin;
+use App\Entity\Origine;
+use App\Entity\Mutuelle;
+use App\Entity\DetailsMutuelle;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -55,8 +54,9 @@ class ApiController extends AbstractController
             $d2 = date('Y-m-d', strtotime($request->get('date2')));
 
             $prestations = $this->getDoctrine()->getRepository(ConsultationExamen::class)->findTodayOrBetween($d1, $d2);
-        } else
+        } else {
             $prestations = $this->getDoctrine()->getRepository(ConsultationExamen::class)->findTodayOrBetween($d1, $d2);
+        }
 
 
         return new JsonResponse(array('content' => $this->render('content/prestations.html.twig', [
@@ -101,8 +101,9 @@ class ApiController extends AbstractController
         $examen = $request->get('examen');
         $exm = $this->getDoctrine()->getRepository(Examen::class)->find($examen);
 
-        if ($exm)
+        if ($exm) {
             return new JsonResponse(array('prix' => $exm->getPrix()));
+        }
 
         return new JsonResponse(array('prix' => 0));
     }
@@ -121,8 +122,9 @@ class ApiController extends AbstractController
             $d2 = date('Y-m-d', strtotime($request->get('date2')));
 
             $consultations = $this->getDoctrine()->getRepository(Consultation::class)->findTodayOrBetween($d1, $d2);
-        } else
+        } else {
             $consultations = $this->getDoctrine()->getRepository(Consultation::class)->findTodayOrBetween($d1, $d2);
+        }
 
 
         return new JsonResponse(array('content' => $this->render('content/consultations.html.twig', [
@@ -136,7 +138,6 @@ class ApiController extends AbstractController
      */
     public function api_ConsultationAdd(Request $request)
     {
-
         $entityManager = $this->getDoctrine()->getManager();
 
         // echo "<pre>";
@@ -150,22 +151,30 @@ class ApiController extends AbstractController
                 $patient = $this->getDoctrine()->getRepository(Patient::class)->find($data['patientid']);
             } else {
                 $p = $data['patient'];
-                if (isset($p['nom']))
+                if (isset($p['nom'])) {
                     $patient->setNom($p['nom']);
-                if (isset($p['cin']))
+                }
+                if (isset($p['cin'])) {
                     $patient->setPrenom($p['cin']);
-                if (isset($p['cin']))
+                }
+                if (isset($p['cin'])) {
                     $patient->setCin($p['cin']);
-                if (isset($p['adresse']))
+                }
+                if (isset($p['adresse'])) {
                     $patient->setAdresse($p['adresse']);
-                if (isset($p['sexe']))
+                }
+                if (isset($p['sexe'])) {
                     $patient->setSexe($p['sexe']);
-                if (isset($p['tel']))
+                }
+                if (isset($p['tel'])) {
                     $patient->setTel($p['tel']);
-                if (isset($p['date_naiss']))
+                }
+                if (isset($p['date_naiss'])) {
                     $patient->setDateNaiss(new \DateTime($p['date_naiss']));
-                if (isset($p['situation']))
+                }
+                if (isset($p['situation'])) {
                     $patient->setSituation($p['situation']);
+                }
                 if (isset($p['ville'])) {
                     $ville = $this->getDoctrine()->getRepository(Ville::class)->find($p['ville']);
                     $patient->setVille($ville);
@@ -188,17 +197,21 @@ class ApiController extends AbstractController
 
                     $detailsmutuelle->setParente($data['parente']);
 
-                    if (isset($data['nomadh']) && !empty($data['nomadh']))
+                    if (isset($data['nomadh']) && !empty($data['nomadh'])) {
                         $detailsmutuelle->setNomAdh($data['nomadh']);
+                    }
 
-                    if (isset($data['prenomadh']) && !empty($data['prenomadh']))
+                    if (isset($data['prenomadh']) && !empty($data['prenomadh'])) {
                         $detailsmutuelle->setPrenomAdh($data['prenomadh']);
+                    }
 
-                    if (isset($data['cinadh']) && !empty($data['cinadh']))
+                    if (isset($data['cinadh']) && !empty($data['cinadh'])) {
                         $detailsmutuelle->setCinAdh($data['cinadh']);
+                    }
 
-                    if (isset($data['nMutu']) && !empty($data['nMutu']))
+                    if (isset($data['nMutu']) && !empty($data['nMutu'])) {
                         $detailsmutuelle->setNMutuelle($data['nMutu']);
+                    }
 
                     $detailsmutuelle->setMutuelle($mutuelle);
 
@@ -216,12 +229,13 @@ class ApiController extends AbstractController
             if ($data['docteur'] != -1) {
                 $medecin = $this->getDoctrine()->getRepository(Medecin::class)->find($data['docteur']);
             } else {
-
-                if (isset($data['nommedecin']) && !empty($data['nommedecin']))
+                if (isset($data['nommedecin']) && !empty($data['nommedecin'])) {
                     $medecin->setNom($data['nommedecin']);
+                }
 
-                if (isset($data['prenommedecin']) && !empty($data['prenommedecin']))
+                if (isset($data['prenommedecin']) && !empty($data['prenommedecin'])) {
                     $medecin->setPrenom($data['prenommedecin']);
+                }
 
                 $entityManager->persist($medecin);
             }
@@ -238,8 +252,9 @@ class ApiController extends AbstractController
 
             //echo $data['date-consultation'];exit;
 
-            if (isset($data['date-consultation']) && !empty($data['date-consultation']))
+            if (isset($data['date-consultation']) && !empty($data['date-consultation'])) {
                 $consultation->setDateConsultation(new \DateTime($data['date-consultation']));
+            }
 
             if (isset($data['presentation']) && !empty($data['presentation'])) {
                 $examen = $this->getDoctrine()->getRepository(Examen::class)->find($data['presentation']);
@@ -299,7 +314,6 @@ class ApiController extends AbstractController
             $entityManager->flush();
 
             return new JsonResponse(['success' => true, 'message' => "La consultation est enrgistrée"], Response::HTTP_OK);
-
         } catch (\Exception $e) {
             return new JsonResponse(['success' => false, 'message' => 'Erreur => ' . $e->getMessage()], Response::HTTP_OK);
         }
@@ -388,10 +402,10 @@ class ApiController extends AbstractController
         $type = $request->get('type');
         if (!is_null($id) && !is_null($etat)) {
             try {
-
                 $ce = $this->getDoctrine()->getRepository(ConsultationExamen::class)->find($id);
-                if (!$ce)
+                if (!$ce) {
                     return new JsonResponse(['success' => false], Response::HTTP_OK);
+                }
 
                 $ce->setEtat($etat);
                 $entityManager = $this->getDoctrine()->getManager();
@@ -417,11 +431,10 @@ class ApiController extends AbstractController
         $type = $request->get('type');
         if (!is_null($id) && !is_null($etat)) {
             try {
-
-
                 $c = $this->getDoctrine()->getRepository(Consultation::class)->find($id);
-                if (!$c)
+                if (!$c) {
                     return new JsonResponse(['success' => false], Response::HTTP_OK);
+                }
 
                 $c->setEtat($etat);
                 $entityManager = $this->getDoctrine()->getManager();
@@ -455,8 +468,9 @@ class ApiController extends AbstractController
         $id_consultation = $paiement->getConsultation()->getId();
 
         $temp = $this->getDoctrine()->getRepository(Model::class)->find($id);
-        if ($temp)
+        if ($temp) {
             $bodyTemplate = $temp->getRapport();
+        }
 
         $ConsultationExamen = $this->getDoctrine()->getRepository(ConsultationExamen::class)->find($id);
 
@@ -509,7 +523,7 @@ class ApiController extends AbstractController
         $consultation = $entityManager->getRepository(Consultation::class)
             ->find($id);
 
-        if (!$consultation)
+        if (!$consultation) {
             return new JsonResponse(array('content' => '<div class="alert alert-danger alert-dismissible" role="alert">
                                                       <div class="alert-message">
                                                           <strong>Erreur !</strong> consultation non trouvé
@@ -519,6 +533,7 @@ class ApiController extends AbstractController
                                                           <span aria-hidden="true">×</span>
                                                       </button>
 									                </div>'));
+        }
 
 
         $rc = $consultation->getRClinique();
@@ -619,8 +634,9 @@ class ApiController extends AbstractController
         $tbody = $request->get('tbody');
         $prestations = $this->getDoctrine()->getRepository(ConsultationExamen::class)->findByConsultation($consult);
 
-        if (is_null($prestations))
+        if (is_null($prestations)) {
             return new JsonResponse(['success' => false], Response::HTTP_OK);
+        }
 
 
         return new JsonResponse(array('content' => $this->render('content/sub-prestations-details.html.twig', [
@@ -638,14 +654,17 @@ class ApiController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $id = $request->get('id');
 
-        if (is_null($id))
+        if (is_null($id)) {
             return new JsonResponse(['success' => false, 'message' => 'ID non valide'], Response::HTTP_OK);
+        }
 
         try {
             $ce = $this->getDoctrine()->getRepository(ConsultationExamen::class)->find($id);
-            if (!$ce)
-                if (is_null($id))
+            if (!$ce) {
+                if (is_null($id)) {
                     return new JsonResponse(['success' => false, 'message' => 'Prestation non trouvée'], Response::HTTP_OK);
+                }
+            }
 
             $idcons = $ce->getConsultation()->getId();
             $entityManager->remove($ce);
@@ -727,7 +746,6 @@ class ApiController extends AbstractController
      */
     public function apiSavePatient(Request $request)
     {
-
         $patientData = $request->get('dataS');
 
         $id = isset($patientData['id']) && !empty($patientData['id']) ? $patientData['id'] : null;
@@ -748,18 +766,21 @@ class ApiController extends AbstractController
         $p = new Patient();
 
         try {
-
             $v = $this->getDoctrine()->getRepository(Ville::class)->find($ville);
-            if (!$v)
+            if (!$v) {
                 return new JsonResponse(['success' => false, 'message' => 'Ville non trouvée'], Response::HTTP_OK);
+            }
 
             $m = $this->getDoctrine()->getRepository(Mutuelle::class)->find($mutuelle);
-            if (!$m)
+            if (!$m) {
                 return new JsonResponse(['success' => false, 'message' => 'Mutuelle non trouvée'], Response::HTTP_OK);
+            }
 
             if (!is_null($id)) {
                 $p = $this->getDoctrine()->getRepository(Patient::class)->find($id);
-                if (!$p) return new JsonResponse(['success' => false, 'message' => 'Patient non trouvé'], Response::HTTP_OK);
+                if (!$p) {
+                    return new JsonResponse(['success' => false, 'message' => 'Patient non trouvé'], Response::HTTP_OK);
+                }
                 $p->setNom($nom)
                     ->setPrenom($prenom)
                     ->setCin($cin)
@@ -823,16 +844,19 @@ class ApiController extends AbstractController
     public function formPatient(Request $request)
     {
         $id = $request->get('id');
-        if (!$id && $request->get('patient')) $id = $request->get('patient')['id'];
+        if (!$id && $request->get('patient')) {
+            $id = $request->get('patient')['id'];
+        }
         $patient = new Patient();
-        if (!isset($id) || is_null($id)) $id = 0;
+        if (!isset($id) || is_null($id)) {
+            $id = 0;
+        }
         $patient = $this->getDoctrine()->getRepository(Patient::class)->find($id);
         $form = $this->createForm(\App\Form\PatientType::class);
         $rc = "";
 
         $form = $this->createForm(\App\Form\PatientType::class, $patient);
         if ($patient) {
-
             $birthDate = explode('-', ($patient->getDateNaiss())->format('m-d-Y'));
             $age = date_diff($patient->getDateNaiss(), date_create('today'))->y;
             $form->get('age')->setData($age);
@@ -842,12 +866,10 @@ class ApiController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
             $entityManager = $this->getDoctrine()->getManager();
             $data = $form->getData();
             $entityManager->persist($data);
             $entityManager->flush();
-
         }
 
         return $this->render('content/patient.html.twig', ['formpatient' => $form->createView()]);
@@ -909,7 +931,6 @@ class ApiController extends AbstractController
         } catch (\Exception $exception) {
             return new JsonResponse(array('success' => false, 'message' => $exception->getMessage()));
         }
-
     }
 
 
@@ -925,8 +946,9 @@ class ApiController extends AbstractController
         $form = null;
         $message = null;
         $action = $this->generateUrl('admin_form_update');
-        if ($id == 0)
+        if ($id == 0) {
             $action = $this->generateUrl('admin_form_add');
+        }
 
         switch ($type) {
 
@@ -943,14 +965,20 @@ class ApiController extends AbstractController
                     ->add('prenom', TextType::class, ['required' => true])
                     ->add('cin', TextType::class, ['required' => true])
                     ->add('adresse', TextType::class, ['required' => true])
-                    ->add('sexe', ChoiceType::class, [
+                    ->add(
+                        'sexe',
+                        ChoiceType::class,
+                        [
                             'choices' => [
                                 'Masculin' => "Masculin",
                                 'Féminin' => "Féminin"],
                             'required' => true
                         ]
                     )
-                    ->add('situation', ChoiceType::class, [
+                    ->add(
+                        'situation',
+                        ChoiceType::class,
+                        [
                             'choices' => [
                                 'Marié' => "Marié",
                                 'Célibataire' => "Célibataire"]
@@ -1122,7 +1150,6 @@ class ApiController extends AbstractController
                 } catch (\Exception $ex) {
                     $status = false;
                     $message = $ex->getMessage();
-
                 }
 
                 break;
@@ -1150,7 +1177,6 @@ class ApiController extends AbstractController
                 } catch (\Exception $ex) {
                     $status = false;
                     $message = $ex->getMessage();
-
                 }
                 break;
 
@@ -1169,7 +1195,6 @@ class ApiController extends AbstractController
                 } catch (\Exception $ex) {
                     $status = false;
                     $message = $ex->getMessage();
-
                 }
 
                 break;
@@ -1177,7 +1202,6 @@ class ApiController extends AbstractController
             case 'e':
 
                 try {
-
                     $nom = $form['nom'];
                     $prix = $form['prix'];
                     $type = $this->getDoctrine()->getRepository(TypeExamen::class)->find($form['type']);
@@ -1194,7 +1218,6 @@ class ApiController extends AbstractController
                 } catch (\Exception $ex) {
                     $status = false;
                     $message = $ex->getMessage();
-
                 }
 
                 break;
@@ -1202,7 +1225,6 @@ class ApiController extends AbstractController
             case 'mu':
 
                 try {
-
                     $nom = $form['nom'];
 
                     $mu = new Mutuelle();
@@ -1215,7 +1237,6 @@ class ApiController extends AbstractController
                 } catch (\Exception $ex) {
                     $status = false;
                     $message = $ex->getMessage();
-
                 }
 
                 break;
@@ -1236,7 +1257,6 @@ class ApiController extends AbstractController
                 } catch (\Exception $ex) {
                     $status = false;
                     $message = $ex->getMessage();
-
                 }
 
                 break;
@@ -1244,7 +1264,6 @@ class ApiController extends AbstractController
             case 'v':
 
                 try {
-
                     $ville = $form['ville'];
 
                     $v = new Ville();
@@ -1257,7 +1276,6 @@ class ApiController extends AbstractController
                 } catch (\Exception $ex) {
                     $status = false;
                     $message = $ex->getMessage();
-
                 }
 
                 break;
@@ -1281,12 +1299,14 @@ class ApiController extends AbstractController
      * @Security("is_fully_authenticated()")
      * @return Response
      */
-    function adminShowAffectation()
+    public function adminShowAffectation()
     {
         $natures = $this->getDoctrine()->getRepository(TypeExamen::class)->findAll();
         $examens = $this->getDoctrine()->getRepository(Examen::class)->findAll();
-        return new JsonResponse(array('content' => $this->render('content/admin/affectation.html.twig',
-            ['natures' => $natures, 'examens' => $examens])->getContent()));
+        return new JsonResponse(array('content' => $this->render(
+            'content/admin/affectation.html.twig',
+            ['natures' => $natures, 'examens' => $examens]
+        )->getContent()));
     }
 
     /**
@@ -1301,7 +1321,6 @@ class ApiController extends AbstractController
         $examens = $this->getDoctrine()->getRepository(Examen::class)->findAll();
 
         return new JsonResponse(array('content' => $this->render('content/admin/affectation-table.html.twig', ['examens' => $examens, 'selected' => $nature])->getContent()));
-
     }
 
     /**
@@ -1317,8 +1336,9 @@ class ApiController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
 
         $nature = $this->getDoctrine()->getRepository(TypeExamen::class)->find($nature);
-        if (!$nature)
+        if (!$nature) {
             return new JsonResponse(['success' => false, 'message' => 'Nature non trouvée']);
+        }
 
         if ($examens && is_array($examens)) {
             $examens = $this->getDoctrine()->getRepository(Examen::class)->findBy(['id' => $examens]);
@@ -1444,7 +1464,6 @@ class ApiController extends AbstractController
             case 'e':
 
                 try {
-
                     $nom = $form['nom'];
                     $prix = $form['prix'];
                     $type = $form['type'];
@@ -1471,7 +1490,6 @@ class ApiController extends AbstractController
             case 'mu':
 
                 try {
-
                     $nom = $form['nom'];
 
                     $mu = $this->getDoctrine()->getRepository(Mutuelle::class)->find($id);
@@ -1511,7 +1529,6 @@ class ApiController extends AbstractController
             case 'v':
 
                 try {
-
                     $ville = $form['ville'];
 
                     $v = $this->getDoctrine()->getRepository(Ville::class)->find($id);
@@ -1532,7 +1549,6 @@ class ApiController extends AbstractController
                 break;
 
         }
-
     }
 
     /************************/
@@ -1577,14 +1593,15 @@ class ApiController extends AbstractController
         $entityManager->flush();
 
         $ids = $request->get('id');
-        if (is_array($ids))
+        if (is_array($ids)) {
             foreach ($ids as $id) {
                 $fce = new FactureConsultationExamen();
                 $ce = $this->getDoctrine()->getRepository(ConsultationExamen::class)->find($id);
                 $fce->setFacture($f);
                 $fce->setConsultExamen($ce);
                 $entityManager->persist($fce);
-            } else {
+            }
+        } else {
             $fce = new FactureConsultationExamen();
             $ce = $this->getDoctrine()->getRepository(ConsultationExamen::class)->find($ids);
             $fce->setFacture($f);
@@ -1613,7 +1630,7 @@ class ApiController extends AbstractController
         $entityManager->persist($f);
 
         try {
-            if (is_array($ids))
+            if (is_array($ids)) {
                 foreach ($ids as $id) {
                     $fce = new FactureConsultationExamen();
                     $ce = $this->getDoctrine()->getRepository(ConsultationExamen::class)->find($id);
@@ -1621,9 +1638,8 @@ class ApiController extends AbstractController
                     $fce->setConsultExamen($ce);
 
                     $entityManager->persist($fce);
-
                 }
-            else {
+            } else {
                 $fce = new FactureConsultationExamen();
                 $ce = $this->getDoctrine()->getRepository(ConsultationExamen::class)->find($ids);
                 $fce->setFacture($f);
@@ -1635,13 +1651,9 @@ class ApiController extends AbstractController
             $entityManager->flush();
 
             return new JsonResponse(['success' => true], Response::HTTP_OK);
-
-        }
-        catch (\Exception $ex)
-        {
+        } catch (\Exception $ex) {
             return new JsonResponse(['success' => false,'message'=>$ex->getMessage() ], Response::HTTP_OK);
         }
-
     }
 
     /*********** */
@@ -1653,7 +1665,5 @@ class ApiController extends AbstractController
      */
     public function RunWordDoc(Request $request)
     {
-
     }
-
 }

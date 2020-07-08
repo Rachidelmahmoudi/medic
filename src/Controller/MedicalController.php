@@ -20,10 +20,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
-
-
-
-class MedicalController extends AbstractController {
+class MedicalController extends AbstractController
+{
 
     /**
      * @Route("/", name="medical_recherche")
@@ -32,7 +30,7 @@ class MedicalController extends AbstractController {
      */
     public function recherche(Request $request)
     {
-        return $this->render('medical/prestations.html.twig',['menuactive'=>1]);
+        return $this->render('medical/prestations.html.twig', ['menuactive'=>1]);
     }
 
     /**
@@ -42,7 +40,7 @@ class MedicalController extends AbstractController {
      */
     public function dossiersPatients(Request $request)
     {
-        return $this->render('medical/consultations.html.twig',['menuactive'=>2]);
+        return $this->render('medical/consultations.html.twig', ['menuactive'=>2]);
     }
 
     /**
@@ -52,13 +50,13 @@ class MedicalController extends AbstractController {
      */
     public function nouvelleConsultation(Request $request)
     {
-      $patients = $this->getDoctrine()->getRepository(Patient::class)->findAll();
-      $mutuelles = $this->getDoctrine()->getRepository(Mutuelle::class)->findAll();
-      $origines = $this->getDoctrine()->getRepository(Origine::class)->findAll();
-      $medcins = $this->getDoctrine()->getRepository(Medecin::class)->findAll();
-      $types = $this->getDoctrine()->getRepository(TypeExamen::class)->findAll();
+        $patients = $this->getDoctrine()->getRepository(Patient::class)->findAll();
+        $mutuelles = $this->getDoctrine()->getRepository(Mutuelle::class)->findAll();
+        $origines = $this->getDoctrine()->getRepository(Origine::class)->findAll();
+        $medcins = $this->getDoctrine()->getRepository(Medecin::class)->findAll();
+        $types = $this->getDoctrine()->getRepository(TypeExamen::class)->findAll();
 
-        return $this->render('medical/nouvelle-consultation.html.twig',['patients'=>$patients,'mutuelles'=>$mutuelles,'origines'=>$origines,'medcins'=>$medcins,'types'=>$types,'menuactive'=>3]);
+        return $this->render('medical/nouvelle-consultation.html.twig', ['patients'=>$patients,'mutuelles'=>$mutuelles,'origines'=>$origines,'medcins'=>$medcins,'types'=>$types,'menuactive'=>3]);
     }
 
     /**
@@ -68,13 +66,13 @@ class MedicalController extends AbstractController {
      */
     public function admin(Request $request)
     {
-        return $this->render('medical/index.html.twig',['menuactive'=>4]);
+        return $this->render('medical/index.html.twig', ['menuactive'=>4]);
     }
 
-    public function subPrestations(Request $request){
+    public function subPrestations(Request $request)
+    {
         $id = $request->get('consultation');
         $prest = $this->getDoctrine()->getRepository(Examen::class)->findByConsultation($id);
-        return $this->render('content/sub-prestations.html.twig',['prest'=> $prest]);
+        return $this->render('content/sub-prestations.html.twig', ['prest'=> $prest]);
     }
-
 }

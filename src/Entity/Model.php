@@ -71,5 +71,4 @@ class Model
 
         return $this;
     }
-
 }

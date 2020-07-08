@@ -47,10 +47,10 @@ class FactureConsultationExamenRepository extends ServiceEntityRepository
         ;
     }
     */
-    public  function  findFacturesgeneres($idconsult)
+    public function findFacturesgeneres($idconsult)
     {
         $r1 = $this->createQueryBuilder('fce')
-            ->innerJoin('App\Entity\ConsultationExamen','ce','with','ce.id = fce.consult_examen')
+            ->innerJoin('App\Entity\ConsultationExamen', 'ce', 'with', 'ce.id = fce.consult_examen')
             ->select(array('ce'))
             ->Where('ce.Consultation = :conc')
             ->setParameter('conc', $idconsult)

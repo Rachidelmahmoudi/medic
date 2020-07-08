@@ -25,9 +25,10 @@ use App\Entity\Ville;
  *
  * @author Asus
  */
-class PatientType extends AbstractType {
+class PatientType extends AbstractType
+{
     //put your code here
-       /**
+    /**
      * configureOptions.
      *
      * @param FormBuilderInterface $builder
@@ -39,7 +40,7 @@ class PatientType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         //'widget' => 'single_text',
-          $builder
+        $builder
             ->setMethod('POST')
                   ->add('id', HiddenType::class)
                   ->add('nom', TextType::class, ['attr' => ['placeholder'=>'Nom']])

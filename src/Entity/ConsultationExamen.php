@@ -37,9 +37,9 @@ class ConsultationExamen
      */
     private $date_paiement ;
 
-     /**
-     * @ORM\Column(type="date", nullable=true)
-     */
+    /**
+    * @ORM\Column(type="date", nullable=true)
+    */
     private $date_examen;
 
     /**
@@ -95,7 +95,7 @@ class ConsultationExamen
     public function __construct()
     {
         $this->date_paiement = new \DateTime();
-        $this->factureConsultationExamens = new ArrayCollection(); 
+        $this->factureConsultationExamens = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -290,11 +290,9 @@ class ConsultationExamen
         return $this;
     }
 
-    public  function __toString()
+    public function __toString()
     {
         // TODO: Implement __toString() method.
         return (string)$this->getStatut();
     }
-
-
 }

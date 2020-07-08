@@ -38,7 +38,7 @@ class Ville
         return $this;
     }
 
-    public  function  __toString()
+    public function __toString()
     {
         return $this->getVille() != null ? $this->getVille()  : "";
         // TODO: Implement __toString() method.

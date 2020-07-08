@@ -33,9 +33,9 @@ class Consultation
      */
     private $prix_total = 0;
 
-     /**
-     * @ORM\Column(type="float", nullable=true)
-     */
+    /**
+    * @ORM\Column(type="float", nullable=true)
+    */
     private $montant_regle = 0;
     
     /**
@@ -266,11 +266,4 @@ class Consultation
 
         return $this;
     }
-
-    
-
-    
-
-    
-    
 }
