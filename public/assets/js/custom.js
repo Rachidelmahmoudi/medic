@@ -1,7 +1,3 @@
-
-
-
-
 $.blockUI.defaults = {
     message: '<div class="spinner-border text-dark mr-2" role="status"><span class="sr-only">Loading...</span></div>',
     centerX: true,
@@ -47,6 +43,50 @@ jQuery.validator.addMethod("avanceMinPrix", function (value, element) {
     return value > $(element).closest('form').find('[name=prix]').val();
 }, "Avance ne peut pas être superieur à prix");
 
+
+
+// Date naiss / Age patient
+
+
+function synchAge(e)
+{
+    let targetvalue = e.value;
+    let day=null;
+    let month =null;
+    let year=null;
+
+    if(/date_naiss/.test(e.name))
+    {
+        day =targetvalue.split('-')[0];
+        month =targetvalue.split('-')[1];
+        year =targetvalue.split('-')[2];
+        let age = getAge(month+'/'+day+'/'+year);
+        $(e).closest('form').find('input[name*=age]').val(age);
+    }
+    else if(/age/.test(e.name))
+    {
+        var today = new Date();
+        year = today.getFullYear() - targetvalue;
+        day =today.getDate();
+        month = today.getMonth()+1;
+        if(year<=0)
+            $(e).closest('form').find('input[name*=date_naiss]').val(day+'-'+month+'-'+today.getFullYear());
+        else
+            $(e).closest('form').find('input[name*=date_naiss]').val(day+'-'+month+'-'+year);
+    }
+}
+
+
+function getAge(DOB) {
+    var today = new Date();
+    var birthDate = new Date(DOB);
+    if(!(birthDate.getTime() === birthDate.getTime()))
+        return 0;
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+
+    return age;
+}
 
 function searchDates(e, type) {
     var date1 = $(e).closest('form').find('input[name=date1]').val();
@@ -412,11 +452,11 @@ function initDatePickers() {
             $(this).find('.input-group-append').attr('data-target', '#' + $(this).attr('id'));
         });
 
-        $('.datetimepicker-date').datetimepicker({ format: 'D-M-Y', locale: 'fr' });
+        $('div.datetimepicker-date').datetimepicker({ format: 'D-M-Y', locale: 'fr' });
 
-        $('.dtaelong').datetimepicker({ format: 'DD-MM-YYYY HH:mm:ss', locale: 'fr' });
+        $('div.dtaelong').datetimepicker({ format: 'DD-MM-YYYY HH:mm:ss', locale: 'fr' });
 
-        $('.date:not(.dtaelong)').datetimepicker({ format: 'DD-MM-YYYY', locale: 'fr' });
+        $('div.date:not(.dtaelong)').datetimepicker({ format: 'DD-MM-YYYY', locale: 'fr' });
     }
 }
 
@@ -450,11 +490,12 @@ function patientComboChanged(e) {
                 $('.patientcontainer').html(d.content);
                 initDatePickers();
                 patientSelect2();
+                initSelect2();
                 savePatient(function () {
                     dataform += "&patientid=" + $('select[name=patientid]').val() + "&";
                     dataform += $('.form-patient').serialize();
                 });
-                $('.form-patient').valid();
+                //$('.form-patient').valid();
             }
         }
     })
@@ -639,7 +680,7 @@ function afficherfacture(id) {
         success: function (data) {
             if (!isNaN(id) && data.hasOwnProperty('content')) {
 
-                $('#facure-editor').css('height', '70vh');
+                $('#facure-editor').css('height', '100vh');
                 $('#facure-editor').html(data.content);
 
 
