@@ -50,7 +50,9 @@ class PatientType extends AbstractType
                   ->add('sexe', ChoiceType::class, ['attr' => ['placeholder'=>'Sexe'],'choices'=>['Masculin'=>'Masculin','Féminin'=>'Féminin']])
                   ->add('tel', TextType::class, ['attr' => ['placeholder'=>'Téléphone']])
                   ->add('date_naiss', DateType::class, ['widget' => 'single_text','html5' => false,'attr' => ['placeholder'=>'Date de naissance']])
-                  ->add('situation', ChoiceType::class, ['attr' => ['placeholder'=>'Situation']])
+                  ->add('situation', ChoiceType::class, ['attr' => ['data-placeholder'=>'Situation'],'choices' => [
+                    'Marié' => "Marié",
+                    'Célibataire' => "Célibataire"]])
                   ->add('ville', EntityType::class, ['class' => Ville::class,'choice_label' => 'ville'])
                   ->add('mutuelle', EntityType::class, ['class' => Mutuelle::class,'choice_label' => 'nom'])
                   ->add('date_resultat', TextType::class, ['mapped' => false])

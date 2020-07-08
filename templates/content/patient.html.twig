@@ -67,7 +67,7 @@
         <div class="form-group">
             {{ form_label(formpatient.date_naiss, 'Date naiss',{'attr':{'class':'form-label'}}) }}
             <div class="input-group date"  data-target-input="nearest">
-                {{ form_widget(formpatient.date_naiss,{ 'attr': {'class': 'form-control datetimepicker-input' } }) }}
+                {{ form_widget(formpatient.date_naiss,{ 'attr': {'class': 'form-control datetimepicker-input','onblur':'synchAge(this)' } }) }}
                 <div class="input-group-append" data-toggle="datetimepicker">
                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                 </div>
@@ -78,7 +78,7 @@
     <div class="col-md-6">
         <div class="form-group">
             {{ form_label(formpatient.age, 'Age',{'attr':{'class':'form-label'}}) }}
-            {{ form_widget(formpatient.age,{ 'attr': {'class': 'form-control'} }) }}
+            {{ form_widget(formpatient.age,{ 'attr': {'class': 'form-control','onchange':'synchAge(this)'} }) }}
         </div>
     </div>
 

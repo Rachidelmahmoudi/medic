@@ -38,7 +38,7 @@
             <div class="sidebar-user">
               <img src="{{ asset('assets/img/avatars/avatar.jpg') }}" class="img-fluid rounded-circle mb-2" alt="Linda Miller"/>
               <div class="font-weight-bold">{{ app.user.username }}</div>
-              <small class="d-none">Front-end Developer</small>
+              <small class="text-capitalize" >{{ app.user.roles|first|slice(5,8)|capitalize  }}</small>
             </div>
 
             <ul class="sidebar-nav">
@@ -77,6 +77,14 @@
                   </li>
 
               {% endif %}
+
+              <li class="sidebar-item">
+                <a href="{{ path("fos_user_security_logout") }}" class="sidebar-link">
+                  <i class="align-middle mr-2 fas fa-fw fa-lock"></i>
+                  <span class="align-middle">Se deconnecter
+                  </span>
+                </a>
+              </li>
 
             </ul>
           </div>

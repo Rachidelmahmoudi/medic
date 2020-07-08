@@ -136,7 +136,7 @@ class AdminController extends AbstractController
 
     /**
      * @Route("/admin/origines/delete/{id}",name="admin_origines_delete")
-     * @Security("is_fully_authenticated()")
+     * @Security("is_fully_authenticated() and is_granted('ROLE_ADMIN')")
      * @return Response
      */
     public function originesDelete(Request $request, $id)
@@ -159,7 +159,7 @@ class AdminController extends AbstractController
 
     /**
      * @Route("/admin/villes/{id}",name="admin_villes",defaults={"id": 0})
-     * @Security("is_fully_authenticated()")
+     * @Security("is_fully_authenticated() and is_granted('ROLE_ADMIN')")
      * @return Response
      */
     public function villes(Request $request, $id)
@@ -190,7 +190,7 @@ class AdminController extends AbstractController
 
     /**
      * @Route("/admin/villes/delete/{id}",name="admin_villes_delete")
-     * @Security("is_fully_authenticated()")
+     * @Security("is_fully_authenticated() and is_granted('ROLE_ADMIN')")
      * @return Response
      */
     public function villesDelete(Request $request, $id)
@@ -213,7 +213,7 @@ class AdminController extends AbstractController
 
     /**
      * @Route("/admin/factures/{id}",name="admin_factures",defaults={"id": 0})
-     * @Security("is_fully_authenticated()")
+     * @Security("is_fully_authenticated() and is_granted('ROLE_ADMIN')")
      * @return Response
      */
     public function factures(Request $request, $id)
@@ -235,7 +235,7 @@ class AdminController extends AbstractController
 
     /**
      * @Route("/admin/factures/delete/{id}",name="admin_factures_delete")
-     * @Security("is_fully_authenticated()")
+     * @Security("is_fully_authenticated() and is_granted('ROLE_ADMIN')")
      * @return Response
      */
     public function facturesDelete(Request $request, $id)
