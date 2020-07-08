@@ -1,0 +1,306 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block subtitleadmin %}  gestion admin  {% endblock %}
+
+{% block bodyadmin %}
+
+    <div class="tab-pane active" id="patient" role="tabpanel">
+
+          <button class="btn btn-primary mb-3" type="button" onclick="showAdd('p')">Ajouter</button>
+
+          <table class="table table-striped data-table mt-3" style="width:100%">
+              <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Prenom</th>
+                    <th>CIN</th>
+                    <th>Adresse</th>
+                    <th>Sexe</th>
+                    <th>Tel</th>
+                    <th>Ville</th>
+                    <th>Mutuelle</th>
+                    <th><b>Gérer</b></th>
+                </tr>
+              </thead>
+              <tbody>
+                    {% if patients|length > 0 %}
+                       {% for p in patients %}
+                            <tr>
+                              <td>{{ p.Nom }}</td>
+                              <td>{{ p.Prenom }}</td>
+                              <td>{{ p.Cin }}</td>
+                              <td>{{ p.Adresse }}</td>
+                              <td>{{ p.Sexe }}</td>
+                              <td>{{ p.Tel }}</td>
+                              <td>{{ p.Ville }}</td>
+                              <td>{{ p.Mutuelle }}</td>
+                              <td class="table-action">
+                                  <a href="#" onclick="showUpdate('p',{{ p.id }})"><i class="align-middle fas fa-fw fa-pen"></i></a>
+                                  <a href="#" onclick="return deleteAdmin('p',{{ p.id }});"><i class="align-middle fas fa-fw fa-trash"></i></a>
+                              </td>
+                            </tr>
+                      {% endfor %}
+                   {% endif %}
+              </tbody>
+              <tfoot>
+              <tr>
+              <th>Nom</th>
+              <th>Prenom</th>
+              <th>CIN</th>
+              <th>Adresse</th>
+              <th>Sexe</th>
+              <th>Tel</th>
+              <th>Ville</th>
+              <th>Mutuelle</th>
+                <th><b>Gérer</b></th>
+              </tr>
+              </tfoot>
+          </table>
+    </div>
+    <div class="tab-pane" id="medecin" role="tabpanel">
+        <button class="btn btn-primary mb-3" type="button" onclick="showAdd('m')">Ajouter</button>
+        <table class="table table-striped data-table mt-3" style="width:100%">
+            <thead>
+              <tr>
+                  <th>Nom</th>
+                  <th>Prenom</th>
+                  <th>Tel</th>
+                  <th>Email</th>
+                  <th>Specialite</th>
+                  <th><b>Gérer</b></th>
+              </tr>
+            </thead>
+            <tbody>
+                  {% if medecins|length > 0 %}
+                     {% for p in medecins %}
+                          <tr>
+                            <td>{{ p.Nom }}</td>
+                            <td>{{ p.Prenom }}</td>
+                            <td>{{ p.Tel }}</td>
+                            <td>{{ p.Email }}</td>
+                            <td>{{ p.Specialite }}</td>
+                            <td class="table-action">
+                                <a href="#" onclick="showUpdate('m',{{ p.id }})"><i class="align-middle fas fa-fw fa-pen"></i></a>
+                                <a href="#" onclick="return deleteAdmin('m',{{ p.id }});"><i class="align-middle fas fa-fw fa-trash"></i></a>
+                            </td>
+                          </tr>
+                    {% endfor %}
+                 {% endif %}
+            </tbody>
+            <tfoot>
+            <tr>
+            <th>Nom</th>
+            <th>Prenom</th>
+            <th>Tel</th>
+            <th>Email</th>
+            <th>Specialite</th>
+            <th><b>Gérer</b></th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="tab-pane" id="nature" role="tabpanel">
+
+    <button class="btn btn-primary mb-3" type="button" onclick="showAdd('n')">Ajouter</button>
+
+    <table class="table table-striped data-table mt-3" style="width:100%">
+        <thead>
+          <tr>
+              <th>Nom</th>
+              <th><b>Gérer</b></th>
+          </tr>
+        </thead>
+        <tbody>
+              {% if natures|length > 0 %}
+                 {% for p in natures %}
+                      <tr>
+                        <td>{{ p.Nom }}</td>
+                        <td class="table-action">
+                            <a href="#" onclick="showUpdate('n',{{ p.id }})" ><i class="align-middle fas fa-fw fa-pen"></i></a>
+                            <a href="#" onclick="return deleteAdmin('n',{{ p.id }});"><i class="align-middle fas fa-fw fa-trash"></i></a>
+                        </td>
+                      </tr>
+                {% endfor %}
+             {% endif %}
+        </tbody>
+        <tfoot>
+        <tr>
+        <th>Nom</th>
+        <th><b>Gérer</b></th>
+        </tr>
+        </tfoot>
+    </table>
+
+    </div>
+    <div class="tab-pane" id="examens" role="tabpanel">
+    <button class="btn btn-primary mb-3" type="button" onclick="showAdd('e')">Ajouter</button>
+    <table class="table table-striped data-table mt-3" style="width:100%">
+        <thead>
+          <tr>
+              <th>Nature</th>
+              <th>Nom</th>
+              <th><b>Gérer</b></th>
+          </tr>
+        </thead>
+        <tbody>
+              {% if examens|length > 0 %}
+                 {% for p in examens %}
+                      <tr>
+                        <td>{{ p.Type.Nom }}</td>
+                        <td>{{ p.Nom }}</td>
+                        <td class="table-action">
+                            <a href="#" onclick="showUpdate('e',{{ p.id }})"><i class="align-middle fas fa-fw fa-pen"></i></a>
+                            <a href="#" onclick="return deleteAdmin('e',{{ p.id }});"><i class="align-middle fas fa-fw fa-trash"></i></a>
+                        </td>
+                      </tr>
+                {% endfor %}
+             {% endif %}
+        </tbody>
+        <tfoot>
+        <tr>
+            <th>Nature</th>
+            <th>Nom</th>
+            <th><b>Gérer</b></th>
+        </tr>
+        </tfoot>
+    </table>
+
+     <button class="btn btn-primary mt-3 mx-auto d-block" type="button" onclick="showAffectation()"> Affectation des natures </button>
+
+
+    </div>
+    <div class="tab-pane" id="mutuelle" role="tabpanel">
+
+  <button class="btn btn-primary mb-3" type="button" onclick="showAdd('mu')">Ajouter</button>
+    <table class="table table-striped data-table mt-3" style="width:100%">
+        <thead>
+          <tr>
+              <th>Nom</th>
+              <th><b>Gérer</b></th>
+          </tr>
+        </thead>
+        <tbody>
+              {% if mutuelles|length > 0 %}
+                 {% for p in mutuelles %}
+                      <tr>
+                        <td>{{ p.Nom }}</td>
+                        <td class="table-action">
+                            <a href="#" onclick="showUpdate('mu',{{ p.id }})"><i class="align-middle fas fa-fw fa-pen"></i></a>
+                            <a href="#" onclick="return deleteAdmin('mu',{{ p.id }});"><i class="align-middle fas fa-fw fa-trash"></i></a>
+                        </td>
+                      </tr>
+                {% endfor %}
+             {% endif %}
+        </tbody>
+        <tfoot>
+        <tr>
+            <th>Nom</th>
+            <th><b>Gérer</b></th>
+        </tr>
+        </tfoot>
+    </table>
+
+    </div>
+    <div class="tab-pane" id="origine" role="tabpanel">
+<button class="btn btn-primary mb-3" type="button" onclick="showAdd('o')">Ajouter</button>
+    <table class="table table-striped data-table mt-3" style="width:100%">
+        <thead>
+          <tr>
+              <th>Origine</th>
+              <th><b>Gérer</b></th>
+          </tr>
+        </thead>
+        <tbody>
+              {% if origines|length > 0 %}
+                 {% for p in origines %}
+                      <tr>
+                        <td>{{ p.Origine }}</td>
+                        <td class="table-action">
+                            <a href="#" onclick="showUpdate('o',{{ p.id }})"><i class="align-middle fas fa-fw fa-pen"></i></a>
+                            <a href="#" onclick="return deleteAdmin('o',{{ p.id }});"><i class="align-middle fas fa-fw fa-trash"></i></a>
+                        </td>
+                      </tr>
+                {% endfor %}
+             {% endif %}
+        </tbody>
+        <tfoot>
+        <tr>
+            <th>Origine</th>
+            <th><b>Gérer</b></th>
+        </tr>
+        </tfoot>
+    </table>
+
+    </div>
+    <div class="tab-pane" id="villes" role="tabpanel">
+
+<button class="btn btn-primary mb-3" type="button" onclick="showAdd('v')">Ajouter</button>
+
+    <table class="table table-striped data-table mt-3" style="width:100%">
+        <thead>
+          <tr>
+              <th>Nom</th>
+              <th><b>Gérer</b></th>
+          </tr>
+        </thead>
+        <tbody>
+              {% if villes|length > 0 %}
+                 {% for p in villes %}
+                      <tr>
+                        <td>{{ p.Ville }}</td>
+                        <td class="table-action">
+                            <a href="#" onclick="showUpdate('v',{{ p.id }})"><i class="align-middle fas fa-fw fa-pen"></i></a>
+                            <a href="#" onclick="return deleteAdmin('v',{{ p.id }});"><i class="align-middle fas fa-fw fa-trash"></i></a>
+                        </td>
+                      </tr>
+                {% endfor %}
+             {% endif %}
+        </tbody>
+        <tfoot>
+        <tr>
+            <th>Nom</th>
+            <th><b>Gérer</b></th>
+        </tr>
+        </tfoot>
+    </table>
+
+    </div>
+    <div class="tab-pane" id="factures" role="tabpanel">
+    <table class="table table-striped data-table mt-3" style="width:100%">
+        <thead>
+          <tr>
+              <th>Numéro</th>
+              <th>Date facture</th>
+              <th>Total</th>
+              <th><b>Gérer</b></th>
+          </tr>
+        </thead>
+        <tbody>
+              {% if factures|length > 0 %}
+                 {% for p in factures %}
+                      <tr>
+                        <td>{{ p.NumFacture }}</td>
+                        <td>{{ p.DateFacture|date('d-m-Y') }}</td>
+                        <td>{{ p.Total }}</td>
+                        <td class="table-action">
+                            <a href="#" ><i class="align-middle fas fa-fw fa-pen"></i></a>
+                            <a href="#" ><i class="align-middle fas fa-fw fa-trash"></i></a>
+                        </td>
+                      </tr>
+                {% endfor %}
+             {% endif %}
+
+        </tbody>
+        <tfoot>
+        <tr>
+            <th>Numéro</th>
+            <th>Date facture</th>
+            <th>Total</th>
+            <th><b>Gérer</b></th>
+        </tr>
+        </tfoot>
+    </table>
+
+    </div>
+
+{% endblock %}

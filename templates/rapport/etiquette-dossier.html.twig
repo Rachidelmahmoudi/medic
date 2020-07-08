@@ -1,0 +1,45 @@
+
+
+
+    <div class="row no-gutters align-items-center justify-content-around">
+        {% if etiquettes is defined and etiquettes|length >0 %}
+
+        {% for lab in etiquettes %}
+
+            <div class="col-md-3 text-center m-3">
+
+                        <strong id="cid{{ lab.id }}">
+                            Date:
+                            {{ lab.DateExamen|date("d/m/Y") }}
+                            <br/>
+                            Id Patient :
+                            {{ lab.Consultation.Patient.Id }}
+                            <br/>
+                            Nom de patient:
+                            {% set patient = not lab.Consultation.Patient is null ? lab.Consultation.Patient.nom~" "~lab.Consultation.Patient.prenom:'' %}
+                            {{ patient }}
+                            <br>
+
+                            Nature :
+                            {{ lab.Examen.Type.nom }}
+                            <br>
+
+                            Examain :
+                            {{ lab.Examen.nom }}
+
+                        </strong>
+                        <br/>
+
+                        <a href="#" onclick="print('#cid{{ lab.id }}')">Imprimer</a>
+
+            </div>
+
+        {% endfor %}
+
+        {% else %}
+
+            <p class="text-center text-info">Aucune etiquettes à afficher ... </p>
+
+        {% endif %}
+
+    </div>

@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}
+Admin - {% block subtitleadmin %}  {% endblock %}
+{% endblock %}
+
+{% block body %}
+
+<div class="row justify-content-center">
+  <div class="col-12 d-flex justify-content-center mb-5">
+
+  <div class="tab">
+								<ul class="nav nav-tabs" role="tablist">
+									<li class="nav-item"><a class="nav-link active" href="#patient" data-toggle="tab" role="tab" aria-selected="true">Gestion patient</a></li>
+									<li class="nav-item"><a class="nav-link" href="#medecin" data-toggle="tab" role="tab" aria-selected="false">Gestion medecin </a></li>
+									<li class="nav-item"><a class="nav-link" href="#nature" data-toggle="tab" role="tab" aria-selected="false">Gestion nature</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#examens" data-toggle="tab" role="tab" aria-selected="false">Gestion examens</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#mutuelle" data-toggle="tab" role="tab" aria-selected="false">Gestion mutuelle</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#origine" data-toggle="tab" role="tab" aria-selected="false">Gestion origine</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#villes" data-toggle="tab" role="tab" aria-selected="false">Gestion villes</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#factures" data-toggle="tab" role="tab" aria-selected="false">Gestion factures</a></li>
+								</ul>
+								<div class="tab-content">
+                      {% block bodyadmin %}
+
+                      {% endblock %}
+								</div>
+							</div>
+  </div>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,16 @@
+{% if prest|length >0 %}
+    <ul class="p-0 m-0" style="list-style:none;">
+
+        {% for p in prest %}
+
+            <li>{{ p.nom }}</li>
+
+        {% endfor %}
+
+    </ul>
+
+    <a href="#" class="showm"> Voir en details  </a>
+
+{% else %}
+    <span class="text-danger">Aucune prestation</span>
+{% endif %}

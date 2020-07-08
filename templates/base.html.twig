@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Responsive Bootstrap 4 Admin &amp; Dashboard Template">
+    <meta name="author" content="Rachid">
+    <title>
+      {% block title %}
+        Application
+      {% endblock %}
+    </title>
+    <link href="{{ asset('assets/css/light.css') }}" type="text/css" media="all" rel="stylesheet">
+    <link href="{{ asset('assets/css/custom.css') }}" type="text/css" media="all" rel="stylesheet">
+ {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
+      <div class="splash active">
+        <div class="splash-icon"></div>
+      </div>
+      <div class="wrapper">
+        <nav id="sidebar" class="sidebar">
+          <a class="sidebar-brand" href="/">
+            <svg>
+              <use xlink:href="#ion-ios-pulse-strong"></use>
+            </svg>
+            Medical
+          </a>
+
+          {% if not menuactive is defined    %}
+              {% set menuactive = 1 %}
+          {% endif %}
+
+
+
+          <div class="sidebar-content">
+            <div class="sidebar-user">
+              <img src="{{ asset('assets/img/avatars/avatar.jpg') }}" class="img-fluid rounded-circle mb-2" alt="Linda Miller"/>
+              <div class="font-weight-bold">{{ app.user.username }}</div>
+              <small class="d-none">Front-end Developer</small>
+            </div>
+
+            <ul class="sidebar-nav">
+
+              <li class="sidebar-item {% if menuactive is defined  and menuactive==1 %} active {% endif %}">
+                <a href="{{ path("medical_recherche") }}" class="sidebar-link">
+                  <i class="align-middle mr-2 fas fa-fw fa-search"></i>
+                  <span class="align-middle">Recherche</span>
+                </a>
+              </li>
+
+              <li class="sidebar-item {% if menuactive is defined  and menuactive==2 %} active {% endif %}">
+                <a href="{{ path("medical_dossiers_patients") }}" class="sidebar-link">
+                  <i class="align-middle mr-2 fas fa-fw fa-folder-open"></i>
+                  <span class="align-middle">Dossiers des patients
+                  </span>
+                </a>
+              </li>
+
+              <li class="sidebar-item {% if menuactive is defined  and menuactive==3 %} active {% endif %}">
+                <a href="{{ path("medical_nouvelle_consultation") }}" class="sidebar-link">
+                  <i class="align-middle mr-2 fas fa-fw fa-plus-circle"></i>
+                  <span class="align-middle">Nouvelle consultation
+                  </span>
+                </a>
+              </li>
+
+              {% if is_granted('ROLE_ADMIN') %}
+
+                  <li class="sidebar-item {% if menuactive is defined  and menuactive==4 %} active {% endif %}">
+                    <a href="{{ path("admin_gestion") }}" class="sidebar-link">
+                      <i class="align-middle mr-2 fas fa-fw fa-plus-circle"></i>
+                      <span class="align-middle">Admin systeme
+                      </span>
+                    </a>
+                  </li>
+
+              {% endif %}
+
+            </ul>
+          </div>
+        </nav>
+        <div class="main">
+
+		<nav class="navbar navbar-expand navbar-theme">
+            <a class="sidebar-toggle d-flex mr-2">
+                <i class="hamburger align-self-center"></i>
+            </a>
+
+            <form class="form-inline d-none d-sm-inline-block">
+                <input class="form-control form-control-lite" type="text" placeholder="">
+            </form>
+
+
+        </nav>
+
+          <main class="content mt-0">
+            <div class="container-fluid">
+
+                {% block body %}{% endblock %}
+
+              </div>
+            </main>
+            <!-- Modal -->
+            <div class="modal fade" id="general-modal" tabindex="-1" role="dialog" aria-hidden="true">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content bglight-gry">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Default modal</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body m-0"></div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script src="{{ asset('assets/js/main.js') }}"></script>
+        <script src="http://malsup.github.io/jquery.blockUI.js"></script>
+        <script src="{{ asset('assets/js/kinzi.print.min.js') }}"></script>
+        <script src="{{ asset('assets/js/fr.js') }}"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/localization/messages_fr.js"></script>
+        <script src="{{ asset('assets/js/custom.js') }}"></script>
+        {% block javascripts %}
+
+        {% endblock %}
+      </body>
+    </html>

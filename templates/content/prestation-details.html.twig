@@ -1,0 +1,165 @@
+{% extends 'base_ajax.html.twig' %}
+
+{% block sections  %}
+  <div class="tab">
+    <ul class="nav nav-tabs" role="tablist">
+
+      <li class="nav-item">
+        <a class="nav-link {% if tab is defined  and tab==1 %} active {% endif %}" href="#tab-7" data-toggle="tab" role="tab">Paiement</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if tab is defined  and tab==2 %} active {% endif %}" href="#tab-8" data-toggle="tab" role="tab">Etiquettes</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link {% if tab is defined  and tab==3 %} active {% endif %}" href="#tab-9" data-toggle="tab" role="tab">Factures</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if tab is defined  and tab==4 %} active {% endif %}" href="#tab-10" data-toggle="tab" role="tab">Compte rendu</a>
+      </li>
+    </ul>
+    <div class="tab-content">
+
+      <div class="tab-pane {% if tab is defined  and tab==2 %} active {% endif %}" id="tab-8" role="tabpanel">
+
+        {{ render(controller('App\\Controller\\EditorController::etiquettePrestation',{ 'id': prestation })) }}
+
+      </div>
+
+      <div class="tab-pane {% if tab is defined  and tab==1 %} active {% endif %}" id="tab-7" role="tabpanel">
+        {% if paiement|length > 0 %}
+          {%  set p = paiement %}
+          <form class="form-wrapper">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label class="form-label">Prestation</label>
+                <input disabled type="text" name="prestation" value="{{ p.Examen.Nom }}" class="form-control">
+              </div>
+              <div class="form-group col-md-6">
+                <label class="form-label">Nature</label>
+                <input disabled type="text" name="nature" value="{{ p.Examen.Type.nom }}" class="form-control">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label class="form-label">Prix</label>
+                <input disabled type="text" name="prix" value="{{ p.Prix }}" class="form-control montant">
+              </div>
+
+              <div class="form-group col-md-6">
+                <label class="form-label">Payé</label>
+                <input name="avance" value="{{ p.Avance }}" onkeyup="return calculerPrestationPaiement(this)" class="form-control  avancespan"/>
+                <i class="fas  mt-1 fa-circle text-{{ p.Statut==2 ? "success":(p.Statut == 1 ? "warning":"danger" ) }} fa-fw statutpaiement"></i>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label class="form-label">Etat</label>
+                <select disabled class="form-control" name="etat">
+                  <option value="1" {% if p.Etat == "1" %} selected {% endif %} class="text-success">
+                    Terminé
+                  </option>
+                  <option value="0" {% if p.Etat != "1" %} selected {% endif %} class="text-warning">En
+                                                        cours
+                  </option>
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label class="form-label">Reste</label>
+                <input disabled name="reste" value="{{ p.Prix - p.Avance }}" class="form-control  reste"/>
+              </div>
+            </div>
+
+            <button type="button" onclick="savePrestationPaiement(this,{{ prestation }});" class="btn btn-primary">Valider</button>
+
+            <div class="btn-group ">
+              <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Imprimer le reçu
+              </button>
+              <div class="dropdown-menu  p-3" style="width: 271px;">
+                <div id="rec{{ p.id }}" class="recu">
+                  <div>
+                    <p>
+                      Date de paiement  :
+                      <b>
+                        {{ "now"|date('d-m-Y') }}</b>
+                    </p>
+                  </div>
+                  <div>
+                    <p>
+                      Nom :
+                      <b>{{ p.Consultation.Patient.nom~' '~p.Consultation.Patient.prenom  }}</b>
+                    </p>
+                  </div>
+
+
+                  <div>
+                    <p>
+                      Nature :
+                      <b>
+                        {{ p.Examen.Type.nom }}
+                      </b>
+                    </p>
+                  </div>
+
+                  <div>
+                    <p>
+                      Examain :
+                      <b>
+                        {{ p.Examen.nom }}
+                      </b>
+                    </p>
+                  </div>
+
+                  <div>
+                    <p>
+                      Prix :
+                      <b>
+                        {{ p.Prix }}
+                      </b>
+                    </p>
+                  </div>
+
+                  <div>
+                    <p>
+                      Payé :
+                      <b>
+                        {{ p.Avance }}
+                      </b>
+                    </p>
+                  </div>
+
+                  <div>
+                    <p>
+                      Reste :
+                      <b>
+                        {{ p.Prix - p.Avance   }}
+                      </b>
+                    </p>
+                  </div>
+
+                </div>
+                <a href="#" class="text-info" onclick="print('.recu');">Imprimer le reçu</a>
+              </div>
+            </div>
+
+          </form>
+        {% endif %}
+      </div>
+
+      <div class="tab-pane {% if tab is defined  and tab==4 %} active {% endif %}" id="tab-10" role="tabpanel">
+            <div class="row">
+                <div id="myEditor" class=" col-xl-12 col-xxl-12">
+                      <button  onclick="sendData()" id='crateCompterendu' class="btn mb-1 btn-secondary"><i class="fas fa-plus"></i> Ajouter un compte rendu</button>
+                </div>
+            </div>
+      </div>
+
+      <div class="tab-pane {% if tab is defined  and tab==3 %} active {% endif %}" id="tab-9" role="tabpanel">
+          {{ render(controller('App\\Controller\\EditorController::facturePrestation',{ 'id': prestation })) }}
+      </div>
+
+    </div>
+
+  </div>
+{% endblock %}

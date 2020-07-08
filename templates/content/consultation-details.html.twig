@@ -1,0 +1,521 @@
+{% extends 'base_ajax.html.twig' %}
+
+{% block sections  %}
+    <div class="tab">
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item"><a class="nav-link  {% if  not tab is defined or tab == 1 %} active {% endif %}" href="#tab-1"
+                                    data-toggle="tab" role="tab">Details de patient</a></li>
+            <li class="nav-item"><a class="nav-link {% if tab is defined  and tab==2 %} active {% endif %}" href="#tab-2"
+                                    data-toggle="tab" role="tab">Prestations</a></li>
+            <li class="nav-item"><a class="nav-link {% if tab is defined  and tab==3 %} active {% endif %}" href="#tab-3"
+                                    data-toggle="tab" role="tab">Etiquettes</a></li>
+            <li class="nav-item"><a class="nav-link {% if tab is defined  and tab==4 %} active {% endif %}" href="#tab-4"
+                                    data-toggle="tab" role="tab">Paiement</a></li>
+            <li class="nav-item"><a class="nav-link {% if tab is defined  and tab==5 %} active {% endif %}" href="#tab-5"
+                                    data-toggle="tab" role="tab">Factures</a></li>
+            <li class="nav-item"><a class="nav-link {% if tab is defined  and tab==6 %} active {% endif %}" href="#tab-6"
+                                    data-toggle="tab" role="tab">Compte rendu</a></li>
+        </ul>
+        <div class="tab-content">
+
+            <div class="tab-pane {% if  not tab is defined or tab == 1 %} active {% endif %}" id="tab-1" role="tabpanel">
+
+                <input type="hidden" class="consultation" value="{{ id }}"/>
+
+                {{ render(controller('App\\Controller\\ApiController::formPatient',{ 'id': patient })) }}
+
+            </div>
+
+          <div class="tab-pane {% if tab is defined and tab==2 %} active {% endif %}" id="tab-2" role="tabpanel">
+
+                <button href="#" onclick="addFormAffectation();" class="mb-3 mt-1 btn btn-primary ">Ajouter
+                    nouveau à la consultation</button>
+
+                <form class="form-inline form-affectation-prestation  align-items-end my-3 " style="display:none;">
+                    <input type="hidden" name="consultation" value="{{ id }}">
+                    <div class="px-2"  >
+                        <label>Nature</label>
+                        <select class="form-control select2 s-nature" style="width: 100%;"  name="nature" onchange="comboboxNatureChanged(this, '.s-prestations');">
+                            <option></option>
+                            {% for f in  allTypes %}
+                                <option value="{{ f.id }}">{{ f.nom }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="px-2">
+                        <label>Prestation</label>
+                        <select class="form-control select2 w-100 s-prestations" name="examens" onchange="comboboxPrestationChanged(this, '.prix');">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                    <div class="px-2"><label>Prix</label>
+                        <input name="prix-prest" class="form-control prix"/>
+                    </div>
+                    <button type="submit" class="btn btn-success">Valider</button>
+                </form>
+
+
+                <table class="table table-striped data-table mt-3 w-100">
+                    <thead>
+                        <tr>
+                            <th>Prestaion</th>
+                            <th>Nature</th>
+                            <th>Prix</th>
+                            <th>Payement</th>
+                            <th>Etat</th>
+                            <th>Payé</th>
+                            <th>Reste</th>
+                            <td class="no-sort"> Valider</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if prestations|length >0 %}
+                            {% for p in prestations %}
+                                <tr class="no-sort" data-child-value="{{ p.id }}">
+                                    <td>{{ p.Examen.Nom }}</td>
+                                    <td>{{ p.Examen.Type.nom }}</td>
+                                    <td>{{ p.Prix }}</td>
+                                    <td>
+                                        <i class="fas fa-circle text-{{ p.Statut==2 ? "success":(p.Statut == 1 ? "warning":"danger" ) }} fa-fw statutpaiement"></i>
+                                    </td>
+                                    <td>
+                                        {% if p.Etat == "1" %}
+                                            <span class="badge badge-success">Terminé</span>
+                                        {% else %}
+                                            <span class="badge badge-warning">En cours</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {{ p.Avance }}
+                                    </td>
+                                    <td>
+                                        <span class="reste">{{ p.Prix - p.Avance }} </span>
+                                    </td>
+                                    <td class="table-action no-sort">
+
+                                        <a style="font-size: 20px;" href="#" onclick="deAffecterExamen({{ p.id }});">
+                                            <i class="align-middle fas fa-fw fa-trash"></i>
+                                        </a>
+
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Prestaion</th>
+                            <th>Nature</th>
+                            <th>Prix</th>
+                            <th>Payement</th>
+                            <th>Etat</th>
+                            <th>Payé</th>
+                            <th>Reste</th>
+                            <td class="no-sort"> Valider</td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+
+
+            </div>
+
+            <div class="tab-pane {% if tab is defined  and tab==3 %} active {% endif %}" id="tab-3" role="tabpanel">
+
+                {{ render(controller('App\\Controller\\EditorController::allEtiquettes',{ 'id': id })) }}
+            </div>
+
+            <div class="tab-pane {% if tab is defined  and tab==4 %} active {% endif %}" id="tab-4" role="tabpanel">
+                <table class=" table table-striped data-table display nowrap w-100 ">
+                    <thead>
+                        <tr>
+                            <th>Prestaion</th>
+                            <th>Nature</th>
+                            <th>Prix</th>
+                            <th>Payement</th>
+                            <th>Etat</th>
+                            <th>Payé</th>
+                            <th>Reste</th>
+                            <td class="no-sort"> Valider</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% if prestations|length >0 %}
+                            {% for p in prestations %}
+                                <tr class="no-sort" data-child-value="{{ p.id }}">
+                                    <td>{{ p.Examen.Nom }}</td>
+                                    <td>{{ p.Examen.Type.nom }}</td>
+                                    <td><span class="montant">{{ p.Prix }}</span></td>
+                                    <td>
+                                        <i class="fas fa-circle text-{{ p.Statut==2 ? "success":(p.Statut == 1 ? "warning":"danger" ) }} fa-fw statutpaiement"></i>
+                                    </td>
+                                    <td>
+                                        {% if p.Etat == "1" %}
+                                            <span class="badge badge-success">Terminé</span>
+                                        {% else %}
+                                            <span class="badge badge-warning">En cours</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <input value="{{ p.Avance }}" onkeyup="return calculerPaiementDossier(this)"
+                                               onblur="return calculerPaiementDossier(this)"
+                                               class="form-control text-center avancespan"/>
+                                    </td>
+                                    <td>
+                                        <span class="reste">{{ p.Prix - p.Avance }} </span>
+                                    </td>
+                                    <td class="table-action no-sort">
+
+                                        <div class="btn-group btn-group-sm">
+                                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+                                                    aria-haspopup="true" aria-expanded="false">
+                                                Imprimer le reçu
+                                            </button>
+                                            <div class="dropdown-menu p-3">
+                                                <div id="rec{{ p.id }}" class="recu">
+                                                    <div>
+                                                        <p> Date de paiement :
+                                                            <b> {{ "now"|date('d-m-Y') }}</b></p>
+                                                    </div>
+                                                    <div>
+                                                        <p> Nom :
+                                                            <b>{{ p.Consultation.Patient.nom~' '~p.Consultation.Patient.prenom }}</b>
+                                                        </p>
+                                                    </div>
+
+
+                                                    <div>
+                                                        <p> Nature :
+                                                            <b>
+                                                                {{ p.Examen.Type.nom }}
+                                                            </b>
+                                                        </p>
+                                                    </div>
+
+                                                    <div>
+                                                        <p>
+                                                            Examain :
+                                                            <b>
+                                                                {{ p.Examen.nom }}
+                                                            </b>
+                                                        </p>
+                                                    </div>
+
+                                                    <div>
+                                                        <p>
+                                                            Prix :
+                                                            <b>
+                                                                {{ p.Prix }}
+                                                            </b>
+                                                        </p>
+                                                    </div>
+
+                                                    <div>
+                                                        <p>
+                                                            Payé :
+                                                            <b>
+                                                                {{ p.Avance }}
+                                                            </b>
+                                                        </p>
+                                                    </div>
+
+                                                    <div>
+                                                        <p>
+                                                            Reste :
+                                                            <b>
+                                                                {{ p.Prix - p.Avance }}
+                                                            </b>
+                                                        </p>
+                                                    </div>
+
+                                                    <div>
+                                                        <p>
+                                                            Date resulat le :
+                                                            <b>
+                                                                {{ p.DateResultat|date('d/m/Y') }}
+                                                            </b>
+                                                        </p>
+                                                    </div>
+
+                                                </div>
+
+                                                <a href="#" class="text-info" onclick="print('#rec{{ p.id }}');">Imprimer le
+                                                    reçu</a>
+                                            </div>
+                                        </div>
+
+                                        <button class="btn btn-success btn-sm" onclick="savePaiementDossier(this,{{ id }} )">Valider
+                                        </button>
+
+
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Prestaion</th>
+                            <th>Nature</th>
+                            <th>Prix</th>
+                            <th>Payement</th>
+                            <th>Etat</th>
+                            <th>Payé</th>
+                            <th>Reste</th>
+                            <td class="no-sort"> Valider</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="tab-pane {% if tab is defined  and tab==5 %} active {% endif %}" id="tab-5" role="tabpanel">
+<h4 class="tab-title my-2">Facture</h4>
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    {% for p in facturesgenere %}
+
+                        <label class="custom-control custom-checkbox ">
+                            <input type="checkbox" class="custom-control-input " value="{{ p.id }}" disabled>
+                            <span class="custom-control-label">{{ p.Examen.nom ~" ( "~p.Examen.Type.nom ~ " ) - " ~ p.Consultation.DateConsultation|date('d-m-Y') }} ( géneré ) <a
+                                        href="#" onclick="afficherfacture({{ p.id }});"> afficher </a></span>
+                        </label>
+
+                    {% endfor %}
+
+                    {% for p in facturesnogenere %}
+
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input checkfacture"
+                                   onchange="enablebutton(this);" value="{{ p.id }}">
+                            <span class="custom-control-label">{{ p.Examen.nom ~" ( "~p.Examen.Type.nom ~ " ) - " ~ p.Consultation.DateConsultation|date('d-m-Y') }} ( non géneré )</span>
+                        </label>
+
+                    {% endfor %}
+
+                </div>
+                <div class="col-md-12">
+
+                    <textarea id="facure-editor" class="form-control  hidden-area " style="height:100%;"></textarea>
+
+                </div>
+                <div class="col-12">
+
+                    <button type="button" class="btn btn-success mt-3 generatefacture" disabled
+                            onclick="genererFactures(this);"> Génerer la facture
+                    </button>
+
+                    <button type="button" class="btn btn-primary mt-3 savefacture float-right"
+                            onclick="saveFactures(this);"> Enregistrer la facture
+                    </button>
+
+                 </div>
+
+            </div>
+            </div>
+
+            <div class="tab-pane {% if tab is defined  and tab==6 %} active {% endif %}" id="tab-6" role="tabpanel">
+
+                <button onclick="sendData()" id='crateCompterendu' class="btn mb-1 btn-secondary"><i
+                        class="fas fa-plus"></i> Ajouter un compte rendu
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block styles %}
+
+<!-- Include the default theme -->
+<link rel="stylesheet" href="{{ asset('sceditor/minified/themes/default.min.css') }}" />
+
+<!-- Include the editors JS -->
+<script src="{{ asset('sceditor/minified/sceditor.min.js') }}"></script>
+
+<script src="sceditor/languages/fr.js"></script>
+<!-- Include the BBCode or XHTML formats -->
+<script src="{{ asset('sceditor/minified/formats/xhtml.js') }}"></script>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+
+        $(function () { // Select2
+            $(".select2").each(function () {
+                $(this).wrap("<div class='position-relative'></div>").select2({placeholder: "Choisissez la valeur", dropdownParent: $(this).parent()});
+            })
+            initDatePickers();
+            $('.data-table').DataTable();
+        })
+
+        $(".form-affectation-prestation").validate({
+            submitHandler: function (form) {
+                var consultation = $('.form-affectation-prestation input[name=consultation]').val();
+                var examen = $('.form-affectation-prestation select[name=examens]').val();
+                var prix = $('.form-affectation-prestation input[name=prix-prest]').val();
+                var reglement = 1;
+                var etat = 0;
+
+                var dataS = {
+                    'consultation': consultation,
+                    'examen': examen,
+                    'prix': prix,
+                    'regelement': reglement,
+                    'etat': etat
+                };
+
+                $.ajax({
+                    url: "/api/consultations/add-prestation",
+                    type: "POST",
+                    data: {dataS},
+                    success: function (data) {
+                        if (data.hasOwnProperty('success') && data.hasOwnProperty('message'))
+                        {
+                            if (data.success)
+                            {
+                                    toastr.success(data.message, "Affectation");
+                                   openConsultation($('.consultation').val(),2);
+                                    searchDates($('.form-search-consultation').get(0), 'c');
+                            } else
+                            {
+                                toastr.error(data.message, "Affectation");
+                            }
+                        }
+                    }
+                })
+            },
+            focusInvalid: true,
+            rules: {
+                "nature": {
+                    required: true
+                },
+                "examens": {
+                    required: true
+                },
+                "prix-prest": {
+                    required: true
+                }
+            },
+            // Errors
+            errorPlacement: function errorPlacement(error, element) {
+                var $parent = $(element).parents(".form-group");
+                // Do not duplicate errors
+                if ($parent.find(".jquery-validation-error").length) {
+                    return;
+                }
+                $parent.append(
+                        error.addClass("jquery-validation-error small form-text invalid-feedback")
+                        );
+            },
+            highlight: function (element) {
+                var $el = $(element);
+                var $parent = $el.parents(".form-group");
+                $el.addClass("is-invalid");
+                // Select2 and Tagsinput
+                if ($el.hasClass("select2-hidden-accessible") || $el.attr("data-role") === "tagsinput") {
+                    $el.parent().addClass("is-invalid");
+                }
+            },
+            unhighlight: function (element) {
+                $(element).parents(".form-group").find(".is-invalid").removeClass("is-invalid");
+            }
+        });
+
+        savePatient(function(){
+          var id = $('#patient_id');
+                var nom = $('#patient_nom');
+                var prenom = $('#patient_prenom');
+                var cin = $('#patient_cin');
+                var adresse = $('#patient_adresse');
+                var sexe = $('#patient_sexe');
+                var ville = $('#patient_ville');
+                var tel = $('#patient_tel');
+                var mutuelle = $('#patient_mutuelle');
+                var datenaiss = $('#patient_date_naiss');
+                var situation = $('#patient_situation');
+                var rc = $('#patient_rc');
+
+                dataS = {
+                    'id': id.val(),
+                    'nom': nom.val(),
+                    'prenom': prenom.val(),
+                    'cin': cin.val(),
+                    'adresse': adresse.val(),
+                    'sexe': sexe.val(),
+                    'ville': ville.val(),
+                    'tel': tel.val(),
+                    'mutuelle': mutuelle.val(),
+                    'datenaiss': datenaiss.val(),
+                    'situation': situation.val(),
+                    'rc': rc.val(),
+                    'consu': $('.consultation').val()
+                }
+
+                $.ajax({
+                    url: "/api/patient/save",
+                    type: "POST",
+                    data: {dataS},
+                    success: function (data) {
+                        if (data!=null && data.hasOwnProperty('success'))
+                        {
+                           if (data.success)
+                            {
+                                toastr.success(data.message, "Patient");
+                            } else
+                            {
+                                toastr.error(data.message, "Patient");
+                            }
+                        }
+                    }
+                })
+        })
+
+        function sendData() { // console.log(document.getElementById('myEditor').getElementsByClassName('wysiwygMode ')[0].innerHTML)
+
+            dataSend = {
+                'idexamin_consultation': 2
+            };
+
+            $.ajax({
+                type: 'post',
+                cache: false,
+                url: '{{ path("RunWordDoc") }}',
+                dataType: 'json',
+                data: dataSend,
+                success: function (data, status, json) {
+
+
+                    if (data == 0) {
+
+                        toastr['warning']("Le Document est deja en cours de traitement", "Compte rendu", {
+                            positionClass: 'toast-top-center',
+                            closeButton: true,
+                            progressBar: false,
+                            newestOnTop: true,
+                            rtl: $("body").attr("dir") === "rtl" || $("html").attr("dir") === "rtl",
+                            timeOut: 1000
+                        });
+                    } else {
+
+
+                    }
+
+
+                },
+                error: function (xml, status, error) { // do something if there was an error
+                },
+                complete: function (xml, status) { // do something after success or error no matter what
+                }
+            });
+
+        }
+
+    </script>
+{% endblock %}

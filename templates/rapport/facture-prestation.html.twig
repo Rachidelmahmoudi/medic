@@ -1,0 +1,112 @@
+{% if facture is defined and facture|length>0 %}
+<div class="row">
+    <div class="col-12">
+        <div class="card" style="box-shadow: none;">
+            <div class="card-body m-3">
+
+                <div class="printable-facture">
+
+                    <div class="print-header as-header">
+
+                        <div class="row align-items-center">
+                            <div class="col-6">
+                                <img src="{{ asset('assets/img/avatars/avatar.jpg') }}" width="100px" height="100px" alt="Logo" class="img-fluid">
+                                <div>
+                                    <b>
+                                        Logo hopital
+                                    </b>
+                                </div>
+                            </div>
+                            <div class="col-6 text-right">
+                                <div class="text-right">
+                                    Rc : 45784554545
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <hr class="my-4" />
+
+
+                <div class="row align-items-center  ">
+                    <div class="col-6">
+                        <div class="text-muted">Facture No. <strong>{{ facture.Facture.NumFacture  }}</strong></div>
+
+                    </div>
+                    <div class="col-6 text-right">
+                        <div class="text-muted">Date Facture</div>
+                        <strong>{{ facture.Facture.DateFacture|date('d-m-Y')  }}</strong>
+                    </div>
+                </div>
+
+                <hr class="my-4" />
+
+                <div class="row align-items-center mb-4 ">
+                    <div class="col-6">
+                        <div class="text-muted">Client</div>
+                        {% set patient = facture.ConsultExamen.Consultation.Patient is defined and not facture.ConsultExamen.Consultation.Patient is null ? facture.ConsultExamen.Consultation.Patient:null  %}
+                        <strong>
+                            {{ patient.Nom~" "~patient.Prenom }}
+                        </strong>
+                        <p>
+                            {{patient.Cin}}
+                            <br>
+
+
+                            {{patient.Tel}}
+                            <br>
+
+                            {{patient.Ville }}
+                            <br>
+
+                            {{patient.Adresse}}
+                        </p>
+                    </div>
+                    <div class="col-6 text-right">
+                        <div class="text-muted">Etablissement medical</div>
+                        <strong>
+                            Spark LLC
+                        </strong>
+                        <p>
+                            Avenue <br> Marrakech <br> 80202 <br> MA <br>
+                            <a href="#">
+                                info@medical.com
+                            </a>
+                        </p>
+                    </div>
+                </div>
+
+                <table class="table table-sm">
+                    <thead>
+                    <tr>
+                        <th>Examin</th>
+                        <th>Payé</th>
+                        <th>Avance</th>
+                        <th class="text-right">Reste</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{{ facture.ConsultExamen.Examen.Nom }}</td>
+                        <td> {{ facture.ConsultExamen.Prix }} Dhs</td>
+                        <td>{{ facture.ConsultExamen.Avance }} Dhs</td>
+                        <td class="text-right">{{ facture.ConsultExamen.Reste }} Dhs</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+                <div class="text-center">
+                    <a href="#" class="btn btn-primary" onclick="print('.printable-facture','.print-header');">
+                        Imprimer
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+    <a href="#" class="btn btn-success" onclick="generateFacturePrestation({{ prestation }});">
+        Générer la facture
+    </a>
+{% endif %}

@@ -1,0 +1,37 @@
+
+
+
+
+<table class="table table-striped data-table  mt-3" style="width:100%">
+  <thead>
+  <tr>
+    <th>Nature</th>
+    <th>Examen</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% if examens|length > 0 %}
+    {% for p in examens %}
+      <tr>
+        <td class="text-left">{{ p.Type.Nom }}</td>
+        <td class="table-action text-left">
+
+          <label class="custom-control custom-checkbox">
+            <input type="checkbox" {% if p.Type.id == selected %}  checked {% endif%} name="{{ p.id }}" class="custom-control-input">
+            <span class="custom-control-label">{{ p.Nom }}</span>
+          </label>
+
+        </td>
+      </tr>
+    {% endfor %}
+  {% endif %}
+  </tbody>
+  <tfoot>
+  <tr>
+    <th>Nature</th>
+    <th>Examen</th>
+  </tr>
+  </tfoot>
+</table>
+
+<button class="btn btn-success mt-3 mx-auto d-block" type="button" onclick="saveAffectation()"> Valider l'affectation </button>

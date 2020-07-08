@@ -1,0 +1,375 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}
+    Nouvelle consultation
+{% endblock %}
+
+
+
+{% block body %}
+
+<div class="row new-consultation">
+    <div class="col-xl-12 col-xxl-12">
+            <div class="accordion" >
+               <div class="row">
+                  <div class="col-md-6">
+                  <div class="card flex-fill w-100">
+                        <div class="card-header">
+                           <h5 class="card-title my-2" data-toggle="collapse" data-target="#Patient"
+                              aria-expanded="true"
+                              aria-controls="Patient">Patient</h5>
+                        </div>
+                        <div id="Patient" class="collapse show" aria-labelledby="headingThree"
+                           data-parent="#accordionExample">
+                           <div class="card-body">
+                              <div class="form-row align-items-end">
+                                 <div class="form-group col-md-6">
+                                    <label>Choisissez le patient</label>
+                                    <select class="form-control searchpatient" onchange="patientComboChanged(this);" name="patientid">
+                                       <option value="-1">Nouveau</option>
+                                       {% for f in  patients %}
+                                            <option value="{{ f.id }}"> {{ f.prenom~" "~f.nom }}</option>
+                                        {% endfor %}
+                                    </select>
+                                 </div>
+                                 <div class="patientcontainer">
+                                   {{ render(controller('App\\Controller\\ApiController::formPatient',{ 'id': 0 })) }}
+                                 </div>
+
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="card flex-fill w-100">
+                        <div class="card-header" id="headingFour">
+                           <h5 class="card-title my-2" data-toggle="collapse" data-target="#Mutuelle"
+                              aria-expanded="true"
+                              aria-controls="Mutuelle">
+                              Mutuelle
+                           </h5>
+                        </div>
+                        <div id="Mutuelle" class="collapse show" aria-labelledby="headingFour"
+                           data-parent="#accordionExample">
+                           <div class="card-body">
+                           <form class="form-mutuelle">
+                              <div class="form-row">
+                                 <div class="form-group col-md-6">
+                                    <label>Mutualiste </label>
+                                    <select class="form-control select2" name="mutualiste">
+                                       <option  value="0">Non mutualiste</option>
+                                       {% for a in  mutuelles %}
+                                       <option value="{{ a.id }}"> {{ a.nom }} </option>
+                                       {% endfor %}
+                                    </select>
+                                 </div>
+                                 <div class="form-group col-md-6">
+                                    <label>Parenté </label>
+                                    <select class="form-control select2" onchange="parenteComboChanged(this);" name="parente">
+                                       <option selected value="-1">Patient même</option>
+                                       <option value="Epouse">Epouse</option>
+                                       <option value="Fils">Fils</option>
+                                       <option value="Fille">Fille</option>
+                                    </select>
+                                 </div>
+                                 <div class="form-group col-md-6">
+                                    <label>Nom Adh </label>
+                                    <input type="text" class="form-control" disabled placeholder="Nom Adh"
+                                       name="nomadh">
+                                 </div>
+                                 <div class="form-group col-md-6">
+                                    <label>Prenom Adh </label>
+                                    <input type="text" class="form-control" disabled placeholder="Prenom Adh"
+                                       name="prenomadh">
+                                 </div>
+                                 <div class="form-group col-md-6">
+                                    <label> CIN Adh : </label>
+                                    <input type="text" class="form-control" disabled placeholder="CIN Adh"
+                                       name="cinadh">
+                                 </div>
+                                 <div class="form-group col-md-6">
+                                    <label> N. Mut : </label>
+                                    <input type="text" class="form-control" disabled placeholder="N. Mut"
+                                       name="nMutu">
+                                 </div>
+                                 <div class="form-group col-md-12">
+                                    <label>Personne à contacter </label>
+                                    <textarea class="form-control" rows="2" placeholder="Personne à contacter"
+                                       name="personneacontacter"></textarea>
+                                 </div>
+                                 <div class="form-group col-md-12">
+                                    <label>Adresse contact </label>
+                                    <textarea class="form-control" rows="2" placeholder="Adresse contact"
+                                       name="adressecontact"></textarea>
+                                 </div>
+                                 <div class="form-group col-md-12">
+                                    <label> Téléphone : </label>
+                                    <input type="text" data-mask="0000000000" class="form-control"
+                                       placeholder="Téléphone" name="telephone">
+                                 </div>
+                              </div>
+                              </form>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+
+
+                  <div class="col-md-6">
+
+                  <div class="card flex-fill w-100">
+                                          <div class="card-header" id="headingTwo">
+                                             <h5 class="card-title my-2" data-toggle="collapse" data-target="#Medecin"
+                                                aria-expanded="true"
+                                                aria-controls="Medecin">
+                                                Medecin
+                                             </h5>
+                                          </div>
+                                          <div id="Medecin" class="collapse show" aria-labelledby="headingTwo"
+                                             data-parent="#accordionExample">
+                                             <div class="card-body">
+                                             <form class="form-medecin">
+                                                <div class="form-row align-items-end">
+                                                   <div class="form-group col-md-12">
+                                                      <label>Origine</label>
+                                                      <select class="form-control select2" name="origine">
+                                                        <option value="0">  ------ </option>
+                                                         {% for o in  origines %}
+                                                         <option value="{{ o.id }}"> {{ o.origine }}</option>
+                                                         {% endfor %}
+
+                                                      </select>
+                                                   </div>
+
+                                                   <div class="form-group col-md-12">
+                                                      <label>Médecin traitant</label>
+                                                      <select class="form-control select2" onchange="doctorChanged(this);" name="docteur">
+                                                         {% for f in  medcins %}
+                                                         <option value="{{ f.id }}" >Dr. {{ f.prenom~' '~f.nom }} </option>
+                                                         {% endfor %}
+                                                         <option value="-1">Autre</option>
+                                                      </select>
+                                                   </div>
+
+                                                   <div class="form-group col-md-12">
+
+                                                      <div class="input-group mb-3 new-medecin">
+                                                         <div class="input-group-prepend">
+                                                            <span class="input-group-text">Dr.</span>
+                                                         </div>
+                                                         <input type="text" class="form-control" disabled name="nommedecin" disabled
+                                                            placeholder="Nom du médecin">
+
+                                                         <input type="text" class="form-control" disabled name="prenommedecin" disabled
+                                                            placeholder="Prenom du médecin">
+                                                      </div>
+
+                                                   </div>
+                                                </div>
+                                                </form>
+                                             </div>
+                                          </div>
+                                       </div>
+                                       <div class="card flex-fill w-100">
+                                          <div class="card-header" id="headingOne">
+                                             <h5 class="card-title my-2" data-toggle="collapse" data-target="#Consultation"
+                                                aria-expanded="true"
+                                                aria-controls="Consultation">
+                                                Examen
+                                             </h5>
+                                          </div>
+                                          <div  class="collapse show" aria-labelledby="headingOne"
+                                             data-parent="#Consultation">
+                                             <div class="card-body">
+                                             <form class="form-examen">
+                                                <div class="form-row align-items-end">
+                                                   <div class="form-group col-md-6">
+                                                      <label class="form-label">Etat</label>
+                                                      <select class="form-control" name="statut-consultation">
+                                                         <option selected value="0">En cours</option>
+                                                         <option value="1">Terminé</option>
+                                                      </select>
+                                                   </div>
+                                                   <div class="form-group col-md-6">
+                                                      <label class="form-label">Date</label>
+                                                      <div class="input-group date dtaelong"
+                                                         data-target-input="nearest">
+                                                         <input type="text" value="{{ "now"|date("d-m-Y h:i:s") }}"
+                                                         class="form-control datetimepicker-input"
+                                                          name="date-consultation"/>
+                                                         <div class="input-group-append" data-toggle="datetimepicker">
+                                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                                         </div>
+                                                      </div>
+                                                   </div>
+                                                </div>
+                                                <div class="form-row align-items-end">
+                                                   <div class="form-group col-md-12">
+                                                      <label class="form-label">Nature </label>
+                                                      <select class="form-control select2 s-nature" onchange="comboboxNatureChanged(this, '.s-prestations');"  name="nature">
+                                                         <option></option>
+                                                         {%  for f in  types %}
+                                                         <option value="{{ f.id }}">{{ f.nom }}</option>
+                                                         {%  endfor  %}
+                                                      </select>
+                                                   </div>
+                                                   <div class="form-group col-md-12">
+                                                      <label class="form-label"> Prestation </label>
+                                                      <select class="form-control select2 s-prestations" onchange="comboboxPrestationChanged(this, '.prix');" name="presentation" >
+                                                      </select>
+                                                   </div>
+                                                   <div class="form-group col-md-6">
+                                                      <label class="form-label">Prix </label>
+                                                      <input type="number" class="form-control prix" placeholder="prix"  min="0"  name="prix">
+                                                   </div>
+                                                   <div class="form-group col-md-6">
+                                                      <label class="form-label">Avance </label>
+                                                      <input type="number" class="form-control" placeholder="avance" min="0" name="avance">
+                                                   </div>
+                                                   <div class="form-group col-md-6">
+                                                      <label class="form-label">Statut paiement </label>
+                                                      <select class="form-control" name="statutpaiement" >
+                                                         <option value="2">Tout payé</option>
+                                                         <option value="1">En cours de paiement</option>
+                                                         <option value="0">Rien payé</option>
+                                                      </select>
+                                                   </div>
+                                                   <div class="form-group col-md-6">
+                                                      <label class="form-label">Date résultat </label>
+                                                      <div class="input-group date dtaelong" data-target-input="nearest">
+                                                         <input type="text" value="{{ "now"|date("d-m-Y h:i:s") }}"
+                                                         class="form-control datetimepicker-input"
+                                                          name="date-resultat"/>
+                                                         <div class="input-group-append"
+                                                            data-toggle="datetimepicker">
+                                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                                         </div>
+                                                      </div>
+                                                   </div>
+                                                   <div class="form-group col-md-6">
+                                                         <label class="form-label">Délivre le :</label>
+                                                         <div class="input-group date"
+                                                            data-target-input="nearest">
+                                                            <input type="text" value="{{ "now"|date("d-m-Y") }}"
+                                                            class="form-control datetimepicker-input"
+                                                            value="{{ "now"|date("d-m-Y") }}" placeholder="Délivré le "
+                                                            name="datedelivre"/>
+                                                            <div class="input-group-append" data-toggle="datetimepicker">
+                                                               <div class="input-group-text"><i class="fa fa-calendar"></i>
+                                                               </div>
+                                                            </div>
+                                                         </div>
+                                                      </div>
+                                                      <div class="form-group col-md-6">
+                                                         <label> Délivré à : </label>
+                                                         <input type="text" class="form-control" placeholder="Délivré à "
+                                                            name="lieudelivre">
+                                                      </div>
+                                                </div>
+                                                <div class="form-row text-center">
+                                                  <button class="btn btn-primary" type="button" onclick="saveConsultation();">Enregistrer la consultation</button>
+                                                </div>
+                                                </form>
+                                             </div>
+                                          </div>
+                                       </div>
+                  </div>
+               </div>
+            </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+  <script>
+
+
+  var dataform  = "";
+      savePatient(function (){
+            if(dataform!="")
+              dataform += "&";
+              dataform+= $('.form-patient').serialize();
+      });
+
+      validateForm('.form-examen',function () {
+        if(dataform!="")
+          dataform += "&";
+          dataform+= $('.form-examen').serialize();
+      },
+      {
+            "nature":
+            {
+                required: true,
+            },
+            "presentation":
+            {
+                required: true,
+            }
+            ,
+            "prix":
+            {
+                required: true,
+            }
+        });
+
+      validateForm(".form-medecin",function () {
+        if(dataform!="")
+          dataform += "&";
+          dataform+= $('.form-medecin').serialize();
+      },
+      {
+        "origine":
+        {
+            required: true,
+        }
+        ,
+        "nommedecin":
+        {
+            required: function(element) {
+                return $('.form-medecin select[name=docteur]').val() == -1;
+            }
+        },
+        "prenommedecin":
+        {
+            required: function(element) {
+                return $('.form-medecin select[name=docteur]').val() == -1;
+            }
+        }
+      });
+
+      validateForm(".form-mutuelle",function () {
+        if(dataform!="")
+          dataform += "&";
+          dataform+= $('.form-mutuelle').serialize();
+      },
+      {
+        "nomadh":
+        {
+          required: function(element) {
+              return $('.form-mutuelle select[name=parente]').val() != -1;
+          }
+        },
+        "prenomadh":
+        {
+          required: function(element) {
+              return $('.form-mutuelle select[name=parente]').val() != -1;
+          }
+        }
+        ,
+        "cinadh":
+        {
+          required: function(element) {
+              return $('.form-mutuelle select[name=parente]').val() != -1;
+          }
+        }
+        ,
+        "nMutu":
+        {
+          required: function(element) {
+              return $('.form-mutuelle select[name=mutualiste]').val() != 0;
+          }
+        }
+      });
+
+  </script>
+{% endblock %}

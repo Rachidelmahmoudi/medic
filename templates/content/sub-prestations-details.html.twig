@@ -1,0 +1,102 @@
+
+{% extends 'base_ajax.html.twig' %}
+
+{% block sections  %}
+
+    {% if prestations|length >0 %}
+
+        <table class="table table-striped data-table" style="width:100%">
+        <thead>
+        <tr>
+            <th>Prestation</th>
+            <th>Nature</th>
+            <th>Prix</th>
+            <th>Paiement</th>
+            <th>Etat</th>
+            <th>Payé</th>
+            <th>Reste</th>
+            <th>
+                <b>Gérer</b>
+            </th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        {% for c in prestations %}
+            <tr class="no-sort" data-child-value="">
+                <td>{{ c.Examen.Nom }}</td>
+                <td>{{ c.Examen.Type.Nom }}</td>
+                <td>{{ c.Prix }}</td>
+                <td>
+                    <i class="fas fa-circle text-{{ c.Statut==2 ? "success":(c.Statut == 1 ? "warning":"danger" ) }} fa-fw statutpaiement"></i>
+                </td>
+                <td>
+                    {% if c.Etat == "1"  %}
+
+                        <div class="btn-group ">
+                            <button type="button" class="btn mb-1 btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                Terminé
+                            </button>
+                            <div class="dropdown-menu " x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 32px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                <a class="dropdown-item etat0" onclick="changeState(this,{{ c.id }},'p');" href="#">En cours</a>
+                            </div>
+                        </div>
+
+                    {% else %}
+
+
+                        <div class="btn-group ">
+                            <button type="button" class="btn mb-1 btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                En cours
+                            </button>
+                            <div class="dropdown-menu " x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 32px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                <a class="dropdown-item etat1" onclick="changeState(this,{{ c.id }},'p');" href="#">Terminé</a>
+                            </div>
+                        </div>
+
+                    {% endif %}
+                </td>
+                <td>
+                    {{ c.Avance }}
+                </td>
+                <td>
+            <span class="reste">{{ c.Prix - c.Avance   }}
+            </span>
+                </td>
+                <td>
+                    <a style="font-size: 20px;" href="#" title="Paiement">
+                        <i class="align-middle fas fa-fw fa-money-bill" onclick="openPrestation({{ c.id }},1)"></i>
+                    </a>
+                    <a style="font-size: 20px;" href="#" title="Facture">
+                        <i class="align-middle fas fa-fw fa-file" onclick="openPrestation({{ c.id }},3)"></i>
+                    </a>
+                    <a style="font-size: 20px;" href="#" title="Etiquettes">
+                        <i class="align-middle fas fa-fw fa-tags" onclick="openPrestation({{ c.id }},2)"></i>
+                    </a>
+
+                    <a style="font-size: 20px;" href="#" data-toggle="tooltip" title="Compte rendu">
+                        <i class="align-middle fas fa-fw  fa-book" onclick="openPrestation({{ c.id }},4)"></i>
+                    </a>
+                </td>
+            </tr>
+
+        {% endfor %}
+        </tbody>
+        <tfoot>
+        <tr>
+        <tr>
+            <th>Prestation</th>
+            <th>Nature</th>
+            <th>Prix</th>
+            <th>Paiement</th>
+            <th>Etat</th>
+            <th>Payé</th>
+            <th>Reste</th>
+            <th>
+                <b>Gérer</b>
+            </th>
+        </tr>
+        </tr>
+        </tfoot>
+        </table>{% endif %}{% endblock %}

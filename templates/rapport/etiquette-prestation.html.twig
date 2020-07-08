@@ -1,0 +1,49 @@
+{% block body %}
+
+
+    <div class="row">
+        <div class="col-12">
+
+            <div class="row">
+
+
+
+                <div class="col-md-12 text-center m-3">
+
+                    <strong class="cid{{ info.id }}">
+
+                        Date Prestation :
+                        {{ info.DateExamen }}<br>
+
+                        ID Patient :
+                        {{ info.Consultation.Patient.Id }}<br>
+
+                        Nom de patient:
+                        {% set patient = not info.Consultation.Patient is null ? info.Consultation.Patient.nom~" "~info.Consultation.Patient.prenom:'' %}
+                        {{ patient }}
+                        <br>
+
+                        Nature :
+                        {{ info.Examen.Type.nom }}
+                        <br>
+
+                        Examain :
+                        {{ info.Examen.nom }}
+
+                    </strong>
+                    <br/>
+
+                    <a href="#" onclick="print('.cid{{ info.id }}');">Imprimer</a>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+    </div>
+
+{% endblock %}
+
+

@@ -1,0 +1,1 @@
+START C:\wamp64\www\projetsFreelancer\medical\public\editor\doc\%1.docx

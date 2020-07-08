@@ -1,0 +1,118 @@
+body {
+            opacity: 0;
+        }
+
+        .card-title {
+            cursor: pointer;
+        }
+
+        .select2-dropdown {
+            z-index: 1 !important;
+        }
+
+        .blockElement {
+            color: unset !important;
+            border: unset !important;
+            background-color: unset !important;
+        }
+
+        .blockOverlay {
+           display: inline-block!important;
+        }
+
+        td.details-control {
+            background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
+            cursor: pointer;
+        }
+
+        tr.shown td.details-control {
+            background: url('https://datatables.net/examples/resources/details_close.png') no-repeat center center;
+        }
+
+        .table td {
+            padding: 3px 0px !important;
+        }
+
+        .data-table td{
+            text-align: center;
+        }
+
+        .table .form-control {
+            display: inline;
+            width: auto;
+        }
+
+        .bglight-gry {
+            background-color: #f4f7fc !important;
+        }
+
+        .table thead th {
+            border-bottom: none !important;
+        }
+
+        @media (min-width: 992px) {
+            .modal-lg, .modal-xl {
+                max-width: 1024px !important;
+            }
+        }
+
+        .form-inline label {
+            justify-content: left !important;
+        }
+
+        .printable-facture table td
+        {
+            vertical-align: middle;
+        }
+        .printable-facture table
+        {
+            margin-bottom:0px;
+        }
+
+
+        @media print {
+            .recu
+            {
+                padding: 10px;
+                border:1px dashed #ccc;
+            }
+            .recu div{
+                margin:3px 0px;
+            }
+
+            .flex-print
+            {
+                display: inline-block!important;
+            }
+            .flex-print .col-md-6{
+                width: 50%;
+            }
+
+
+            .as-header
+            {
+                display: none;
+            }
+        }
+
+
+#Patient  .form-patient .submitcontainer, #Patient  .form-patient .dateresultatcontainer , #general-modal .form-patient .dateresultatcontainer , #general-modal .form-patient  .rccontainer
+{
+    display: none;
+}
+
+div.dataTables_wrapper div.dataTables_filter label{
+  width: 100%;
+    display: flex;
+    height: 40px;
+    align-items: center;
+}
+
+div.dataTables_wrapper div.dataTables_filter label input{
+  width: 100%;
+  height: 100%;
+  font-size: 20px;
+}
+
+
+

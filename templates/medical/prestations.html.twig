@@ -1,0 +1,147 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}
+  Liste des prestations
+{% endblock %}
+
+{% block body %}
+
+  <div class="row">
+    <div class="col-xl-12 col-xxl-12">
+      <div class="card flex-fill w-100">
+        <div class="card-header">
+          <div class="card-actions float-right">
+            <a href="#" class="mr-1">
+              <i class="align-middle" data-feather="refresh-cw"></i>
+            </a>
+
+            <div class="d-inline-block dropdown show">
+              <a href="#" data-toggle="dropdown" data-display="static">
+                <i class="align-middle" data-feather="more-vertical"></i>
+              </a>
+
+              <div class="dropdown-menu dropdown-menu-right">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+            </div>
+          </div>
+
+
+          <h5 class="card-title mb-0">Les prestations</h5>
+
+          <form method="post" class="form-search-prestation">
+            <div class="row justify-content-center align-items-start">
+
+              <div class="col-12 col-xl-3">
+                                <div class="form-group">
+
+                                    <div class="input-group input-group-lg date"  data-target-input="nearest">
+                                        <input type="text" name="date1" value="{% if d1 is defined %} {{ d1 }} {% else %} {{ "now"|date("d-m-Y") }} {% endif %}" class="form-control datetimepicker-input" />
+
+                                        <div class="input-group-append"  data-toggle="datetimepicker">
+                                            <div class="input-group-text">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-xl-3">
+                                <div class="form-group">
+
+                                    <div class="input-group input-group-lg date"  data-target-input="nearest">
+                                        <input type="text" name="date2" value="{% if d2 is defined %} {{ d2 }} {% else %} {{ "now"|date_modify("+1 day")|date("d-m-Y") }} {% endif %}" class="form-control datetimepicker-input" />
+
+                                        <div class="input-group-append"  data-toggle="datetimepicker">
+                                            <div class="input-group-text">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+              <div class="col-12 col-xl-3">
+                <button type="button" onclick="searchDates(this,'p');" class="btn btn-primary">Valider
+                                                      la recherche
+                </button>
+              </div>
+
+            </div>
+          </form>
+        </div>
+        <div class="card-body py-3">
+
+          <table class="table table-striped data-table" style="width:100%">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Id patient</th>
+                <th>Nom patient</th>
+                <th>Prenom patient</th>
+                <th>Medecin</th>
+                <th>Prestation</th>
+                <th>Origine</th>
+                <th>Montant</th>
+                <th>Paiement</th>
+                <th>Etat</th>
+                <th>Payé</th>
+                <th>Reste</th>
+                <th>
+                  <b>Gérer</b>
+                </th>
+
+              </tr>
+            </thead>
+
+            <tbody></tbody>
+
+            <tfoot>
+              <tr>
+                <th>Date</th>
+                <th>Id patient</th>
+                <th>Nom patient</th>
+                <th>Prenom patient</th>
+                <th>Medecin</th>
+                <th>Prestation</th>
+                <th>Origine</th>
+                <th>Montant</th>
+                <th>Paiement</th>
+                <th>Etat</th>
+                <th>Payé</th>
+                <th>Reste</th>
+                <th>
+                  <b>Gérer</b>
+                </th>
+              </tr>
+            </tfoot>
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+       $.ajax({
+            url:"{{ path('api_prestations_list') }}",
+            type:"POST",
+            success:function(d){
+                if(d!=null && d.hasOwnProperty('content') && d.content.includes("<table"))
+                {
+                    $('.data-table').closest('.card-body').html(d.content);
+                }
+            }
+        })
+</script>
+
+{% endblock %}

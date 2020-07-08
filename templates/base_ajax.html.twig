@@ -1,0 +1,17 @@
+{% block styles %}{% endblock %}
+{% block sections %}<h3>dfdfdf</h3>{% endblock %}
+{% block scripts %}
+<script>
+    $(function () { // Select2
+              $(".select2").each(function () {
+                $(this).wrap("<div class='position-relative'></div>").select2({placeholder: "Choisissez la valeur", dropdownParent: $(this).parent()});
+              })
+
+                $('.data-table').DataTable();
+
+
+
+
+            })
+</script>
+{% endblock %}

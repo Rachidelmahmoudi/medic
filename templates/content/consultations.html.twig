@@ -1,0 +1,157 @@
+{% extends 'base_ajax.html.twig' %}
+
+{% block sections %}
+
+    {% if consultations|length >0 %}
+
+        <table class="table table-striped data-table" style="width:100%">
+        <thead>
+        <tr>
+            <th>Date</th>
+            <th>Id patient</th>
+            <th>Nom patient</th>
+            <th>Prenom patient</th>
+            <th>Medcin</th>
+            <th>Prestations</th>
+            <th>Etat</th>
+            <th>Montant</th>
+            <th>Payé</th>
+            <th>Reste</th>
+            <th>Statut</th>
+            <th><b>Gérer</b></th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        {% for c in consultations %}
+            <tr class="no-sort" data-child-value="{{ c.id }}">
+                <td>{{ c.DateConsultation|date('d-m-Y') }}</td>
+                <td>{{ c.Patient.id }}</td>
+                <td>{{ c.Patient.nom }}</td>
+                <td>{{ c.Patient.prenom }}</td>
+                <td>{{ c.Medecin != null ? c.Medecin.nom~' '~c.Medecin.prenom:'' }}</td>
+                <td class="p-0">
+
+                    {{ render(controller('App\\Controller\\MedicalController::subPrestations',{ 'consultation': c.id } )) }}
+
+                </td>
+                <td>
+
+                    {% if c.Etat == "1" %}
+
+                        <div class="btn-group ">
+                            <button type="button" class="btn mb-1 btn-success dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="true">
+                                Terminé
+                            </button>
+                            <div class="dropdown-menu " x-placement="bottom-start"
+                                 style="position: absolute; transform: translate3d(0px, 32px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                <a class="dropdown-item etat0" onclick="changeState(this,{{ c.id }},'c');" href="#">En
+                                    cours</a>
+                            </div>
+                        </div>
+
+                    {% else %}
+
+
+                        <div class="btn-group ">
+                            <button type="button" class="btn mb-1 btn-warning dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="true">
+                                En cours
+                            </button>
+                            <div class="dropdown-menu " x-placement="bottom-start"
+                                 style="position: absolute; transform: translate3d(0px, 32px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                <a class="dropdown-item etat1" onclick="changeState(this,{{ c.id }},'c');" href="#">Terminé</a>
+                            </div>
+                        </div>
+
+                    {% endif %}
+
+                </td>
+                <td><span class="montant">{{ c.PrixTotal }}</span></td>
+                <td><span class="avancespn">{{ c.Avance }}</span> <input type="number" name="avance{{ c.id }}"
+                                                                         value="{{ c.Avance }}"
+                                                                         onkeyup="return calculerConsultation(this)"
+                                                                         class="form-control d-none"/></td>
+                <td><span class="reste"> {{ c.PrixTotal - c.Avance }} </span></td>
+                <td>
+                    <i class="fas fa-circle text-{{ c.Statut==2 ? "success":(c.Statut == 1 ? "warning":"danger" ) }} fa-fw statutpaiement"></i>
+                </td>
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <a style="font-size: 20px;" onclick="openConsultation({{ c.id }})" href="#">
+                            <i class="align-middle fas fa-fw fa-pen"></i>
+                        </a>
+
+
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+        <tr>
+            <th>Date</th>
+            <th>Id patient</th>
+            <th>Nom patient</th>
+            <th>Prenom patient</th>
+            <th>Medcin</th>
+            <th>Prestations</th>
+            <th>Etat</th>
+            <th>Montant</th>
+            <th>Payé</th>
+            <th>Reste</th>
+            <th>Statut</th>
+            <th><b>Gérer</b></th>
+        </tr>
+        </tfoot>
+        </table>{% endif %}
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+
+    <script>
+
+
+
+        $('.data-table').DataTable({language: {searchPlaceholder: "Chercher par Cin , nom , prenom et examen , ID patient ..."}});
+
+        $('.data-table').on('click', '.showm', function () {
+
+            var tr = $(this).parents('tr');
+            var row = $('.data-table').DataTable().row(tr);
+            var id = tr.data('child-value');
+
+            if (row.child.isShown()) {
+
+                row.child.hide();
+                tr.removeClass('shown');
+
+            } else {
+
+                $('.data-table').DataTable().rows().eq(0).each(function (idx) {
+                    var row = $('.data-table').DataTable().row(idx);
+                    if (row.child.isShown()) {
+                        row.child.hide();
+                    }
+                });
+
+                $.ajax({
+                    url: "{{ path('api_prestations_de_consultation') }}",
+                    type: "POST",
+                    data: {"id": id},
+                    success: function (d) {
+                        if (d != null && d.hasOwnProperty('content')) {
+                            row.child(d.content).show();
+                            tr.addClass('shown');
+                        }
+
+                    }
+                })
+            }
+        });
+    </script>
+
+{% endblock %}

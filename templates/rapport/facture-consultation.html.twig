@@ -1,0 +1,101 @@
+
+<div class="col-12">
+
+    <div class="print-header as-header">
+
+        <div class="row align-items-center">
+            <div class="col-6">
+                <img src="{{ asset('assets/img/avatars/avatar.jpg') }}" width="100px" height="100px" alt="Logo" class="img-fluid">
+                <div>
+                    <b>
+                        Logo hopital
+                    </b>
+                </div>
+            </div>
+            <div class="col-6 text-right">
+                <div class="text-right">
+                    Rc : 45784554545
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <hr class="my-4" />
+
+    {% if facture is defined and not facture is null %}
+        <div class="row" id="facture{{ facture.id }}">
+            <div class="col-md-6">
+
+                    <div class="text-muted">No. de facture</div>
+                    <strong>{{ facture.NumFacture }}</strong>
+
+            </div>
+
+            <div class="col-md-6 text-md-right">
+                <div class="text-muted">Date de facture
+                </div>
+                <strong>{{ facture.DateFacture|date('d-m-Y') }}</strong>
+            </div>
+
+        </div>
+    {% endif %}
+
+    <hr class="my-4">
+
+    {% if patient is defined and not patient is null %}
+        <div class="row mb-4" id="patient{{ patient.id }}">
+            <div class="col-md-6">
+                <div class="text-muted">Patient</div>
+                <strong>
+                    <span>{{ patient.prenom }}</span>  <span> {{ patient.nom }} </span>
+                </strong>
+                    <p>{{ patient.Cin }}</p>
+                    <p>{{ patient.Tel }}</p>
+                    <p>{{ patient.Ville }}</p>
+                    <p>{{ patient.adresse }}</p>
+            </div>
+        </div>
+    {% endif %}
+
+
+    <table class="table table-sm w-100">
+        <thead>
+        <tr>
+            <th class="text-center">Examin</th>
+            <th class="text-center">Prix</th>
+            <th class="text-center">Avance</th>
+            <th class="text-right">Reste</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% if prestationsfactures|length >0 %}
+
+            {%  set total=0 %}
+
+            {% for p in prestationsfactures %}
+                <tr id="prestation{{ p.id }}">
+                    <td class="text-center">{{ p.Examen.nom }}</td>
+                    <td class="text-center">{{ p.Prix }}</td>
+                    <td class="text-center">{{ p.Avance }}</td>
+                    <td class="text-right">{{ p.Prix - p.Avance  }}</td>
+                </tr>
+                {%  set total=total+p.Prix %}
+            {% endfor %}
+
+        {% endif %}
+
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+                <h3 class="d-block text-right">  Total :  {{ total }} </h3>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+
+</div>

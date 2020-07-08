@@ -1,0 +1,121 @@
+{{ form_start(formpatient,{'attr': {'novalidate': 'novalidate' , 'class':'form-patient'}}) }}
+
+
+<div class="row">
+
+    {{ form_widget(formpatient.id) }}
+
+    <div class="col-md-6">
+        <div class="form-group">
+            {{ form_label(formpatient.nom, 'Nom',{'attr':{'class':'form-label'}}) }}
+            {{ form_widget(formpatient.nom,{ 'attr': {'class': 'form-control','placeholder':'Nom'} }) }}
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            {{ form_label(formpatient.prenom, 'Prenom',{'attr':{'class':'form-label'}}) }}
+            {{ form_widget(formpatient.prenom,{ 'attr': {'class': 'form-control','placeholder':'Prenom'} }) }}
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            {{ form_label(formpatient.cin, 'Cin',{'attr':{'class':'form-label'}}) }}
+            {{ form_widget(formpatient.cin,{ 'attr': {'class': 'form-control','placeholder':'Cin'} }) }}
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            {{ form_label(formpatient.adresse, 'Adresse',{'attr':{'class':'form-label'}}) }}
+            {{ form_widget(formpatient.adresse,{ 'attr': {'class': 'form-control','placeholder':'adresse'} }) }}
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            {{ form_label(formpatient.sexe, 'Sexe',{'attr':{'class':'form-label'}}) }}
+            {{ form_widget(formpatient.sexe,{ 'attr': {'class': 'form-control'} }) }}
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            {{ form_label(formpatient.ville, 'Ville',{'attr':{'class':'form-label'}}) }}
+            {{ form_widget(formpatient.ville,{ 'attr': {'class': 'form-control select2'} }) }}
+        </div>
+    </div>
+
+
+    <div class="col-md-6">
+        <div class="form-group">
+            {{ form_label(formpatient.tel, 'Tel',{'attr':{'class':'form-label'}}) }}
+            {{ form_widget(formpatient.tel,{ 'attr': {'class': 'form-control','placeholder':'Tel','data-mask':'0000000000','maxlength':'10'} }) }}
+        </div>
+    </div>
+
+
+    <div class="col-md-6">
+        <div class="form-group">
+            {{ form_label(formpatient.mutuelle, 'Mutuelle',{'attr':{'class':'form-label'}}) }}
+            {{ form_widget(formpatient.mutuelle,{ 'attr': {'class': 'form-control select2'} }) }}
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            {{ form_label(formpatient.date_naiss, 'Date naiss',{'attr':{'class':'form-label'}}) }}
+            <div class="input-group date"  data-target-input="nearest">
+                {{ form_widget(formpatient.date_naiss,{ 'attr': {'class': 'form-control datetimepicker-input' } }) }}
+                <div class="input-group-append" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            {{ form_label(formpatient.age, 'Age',{'attr':{'class':'form-label'}}) }}
+            {{ form_widget(formpatient.age,{ 'attr': {'class': 'form-control'} }) }}
+        </div>
+    </div>
+
+
+
+    <div class="col-md-6">
+        <div class="form-group">
+            {{ form_label(formpatient.situation, 'Situation',{'attr':{'class':'form-label'}}) }}
+            {{ form_widget(formpatient.situation,{ 'attr': {'class': 'form-control select2'} }) }}
+        </div>
+    </div>
+
+
+    <div class="col-md-6 rccontainer">
+        <div class="form-group">
+            {{ form_label(formpatient.rc, 'Renseignement clinique',{'attr':{'class':'form-label'}}) }}
+            {{ form_widget(formpatient.rc,{ 'attr': {'class': 'form-control'} }) }}
+        </div>
+    </div>
+
+    <div class="col-md-6 dateresultatcontainer">
+        <div class="form-group">
+            {{ form_label(formpatient.date_resultat, 'Resultat le ',{'attr':{'class':'form-label'}}) }}
+            <div class="input-group date"  data-target-input="nearest">
+                {{ form_widget(formpatient.date_resultat,{ 'attr': {'class': 'form-control datetimepicker-input'} }) }}
+                <div class="input-group-append" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 text-right submitcontainer">
+        {{ form_widget(formpatient.save, { 'attr': {'class': 'btn btn-primary px-5 float-right'} , 'label': 'Valider' } ) }}
+    </div>
+
+</div>
+
+
+{{ form_end(formpatient) }}
