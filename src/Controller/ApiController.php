@@ -1587,7 +1587,7 @@ class ApiController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         $f = new Facture();
-        $f->setNumFacture(uniqid() . "-" . date('Y'));
+        $f->setNumFacture(mt_rand(1000, 9999) . "-" . date('Y'));
         $f->setDateFacture(new DateTime(strftime(date('Y-m-d'))));
         $entityManager->persist($f);
         $entityManager->flush();
@@ -1625,7 +1625,7 @@ class ApiController extends AbstractController
         $ids = $request->get('ids');
 
         $f = new Facture();
-        $f->setNumFacture(uniqid() . "-" . date('Y'));
+        $f->setNumFacture(mt_rand(1000, 9999) . "-" . date('Y'));
         $f->setDateFacture(new DateTime(strftime(date('Y-m-d'))));
         $entityManager->persist($f);
 
