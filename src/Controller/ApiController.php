@@ -1650,7 +1650,7 @@ class ApiController extends AbstractController
 
             $entityManager->flush();
 
-            return new JsonResponse(['success' => true], Response::HTTP_OK);
+            return new JsonResponse(['success' => true,'facture'=> $f->getId()], Response::HTTP_OK);
         } catch (\Exception $ex) {
             return new JsonResponse(['success' => false,'message'=>$ex->getMessage() ], Response::HTTP_OK);
         }

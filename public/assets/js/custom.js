@@ -697,7 +697,11 @@ function afficherfacture(id) {
                     plugins: 'autosave,undo',
                     autoUpdate: true,
                     autosave: {
-                        expires: 86400000
+                        expires: 86400000,
+                        storageKey: 'sce-autodraft-' + location.pathname + location.search,
+                        saveHandler: function (data) {
+                            console.log(data)
+                        }
                     }
                 });
             }
@@ -734,16 +738,32 @@ function genererFactures(e) {
             type: "POST",
             data: { "ids": ids },
             success: function (data) {
-                toastr.error(data.message, "Erreur");
+                if(data.hasOwnProperty('facture'))
+                {
+                    afficherfacture(facture);
+                }
+                else{
+                    toastr.error(data.message, "Erreur");
+                }
             }
         })
     }
     else {
-
+        toastr.error('Facture non générée', "Erreur");
 
     }
 }
 
+
+function saveFactures(e)
+{
+    var facureEditor = document.getElementById('facure-editor');
+    if (sceditor.instance(facureEditor) != null)
+    {
+        let instance = sceditor.instance(facureEditor);
+        console.log('saved');
+    }
+}
 
 
 
