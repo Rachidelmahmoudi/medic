@@ -54,7 +54,7 @@ class AdminController extends AbstractController
 
         return $this->render('admin/content.html.twig', ['patients'=>$patients,
             'medecins'=>$medecins,'natures'=>$natures,'examens'=>$examens,
-            'mutuelles'=>$mutuelles,'origines'=>$origines,'villes'=>$villes,'factures'=>$factures]);
+            'mutuelles'=>$mutuelles,'origines'=>$origines,'villes'=>$villes,'factures'=>$factures,'menuactive'=>4]);
     }
 
     /**
